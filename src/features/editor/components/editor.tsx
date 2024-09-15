@@ -1,7 +1,7 @@
 'use client';
 
-import { fabric } from 'fabric';
 import { useEditor } from '@/features/editor/hooks/useEditor';
+import { fabric } from 'fabric';
 import { useEffect, useRef } from 'react';
 
 export const Editor = () => {
@@ -15,17 +15,20 @@ export const Editor = () => {
     }
     const canvas = new fabric.Canvas(canvasRef.current, {
       controlsAboveOverlay: true,
-      preserveObjectStacking: true
+      preserveObjectStacking: true,
     });
     init({
       initialCanvas: canvas,
-      initialContainer: containerRef.current
+      initialContainer: containerRef.current,
     });
   }, [init]);
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-1 h-full bg-muted" ref={containerRef}>
+      <div
+        className="flex-1 h-full bg-muted"
+        ref={containerRef}
+      >
         <canvas ref={canvasRef} />
       </div>
     </div>
