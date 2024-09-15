@@ -29,6 +29,10 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .editor-height {
+    height: calc(100% - (theme(space.editor-navbar) + theme(space.editor-toolbar)));
+  }
 }
 
 @layer base {

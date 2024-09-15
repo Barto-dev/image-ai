@@ -10,6 +10,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      spacing: {
+        'editor-navbar': '68px',
+        'editor-toolbar': '56px',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
