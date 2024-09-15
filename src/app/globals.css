@@ -31,7 +31,9 @@ body {
   }
 
   .editor-height {
-    height: calc(100% - (theme(space.editor-navbar) + theme(space.editor-toolbar)));
+    height: calc(
+      100% - (theme(space.editor-navbar) + theme(space.editor-toolbar))
+    );
   }
 }
 

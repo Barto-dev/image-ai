@@ -18,7 +18,9 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeArgs) => {
 
     const center = canvas.getCenter();
     const zoomRatio = 0.85;
-    const localWorkspace = canvas.getObjects().find((object) => object.name === 'clip');
+    const localWorkspace = canvas
+      .getObjects()
+      .find((object) => object.name === 'clip');
 
     // @ts-ignore
     const scale = fabric.util.findScaleToFit(localWorkspace, {
@@ -37,12 +39,18 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeArgs) => {
     const localWorkspaceCenter = localWorkspace.getCenterPoint();
     const viewPortTransform = canvas.viewportTransform;
 
-    if (canvas.width === undefined || canvas.height === undefined || !viewPortTransform) {
+    if (
+      canvas.width === undefined ||
+      canvas.height === undefined ||
+      !viewPortTransform
+    ) {
       return;
     }
 
-    viewPortTransform[4] = canvas.width / 2 - localWorkspaceCenter.x * viewPortTransform[0];
-    viewPortTransform[5] = canvas.height / 2 - localWorkspaceCenter.y * viewPortTransform[3];
+    viewPortTransform[4] =
+      canvas.width / 2 - localWorkspaceCenter.x * viewPortTransform[0];
+    viewPortTransform[5] =
+      canvas.height / 2 - localWorkspaceCenter.y * viewPortTransform[3];
 
     canvas.setViewportTransform(viewPortTransform);
 

@@ -8,13 +8,26 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { ChevronDown, Download, MousePointerClick, Redo2, Undo2 } from 'lucide-react';
+import {
+  ChevronDown,
+  Download,
+  MousePointerClick,
+  Redo2,
+  Undo2,
+} from 'lucide-react';
 import { CiFileOn } from 'react-icons/ci';
 import { Separator } from '@/components/ui/separator';
 import { Hint } from '@/components/hint';
 import { BsCloudCheck } from 'react-icons/bs';
+import { ActiveTool } from '@/features/editor/types';
+import { cn } from '@/lib/utils';
 
-export const Navbar = () => {
+interface NavbarProps {
+  activeTool: ActiveTool;
+  onChangeActiveTool: (tool: ActiveTool) => void;
+}
+
+export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
   return (
     <nav className="w-full flex items-center p-4 h-editor-navbar gap-x-8 border-b lg:pl-[34px]">
       <Logo />
@@ -37,7 +50,9 @@ export const Navbar = () => {
               <CiFileOn className="size-8" />
               <div>
                 <p>Open</p>
-                <p className="text-xs text-muted-foreground">Open a JSON file</p>
+                <p className="text-xs text-muted-foreground">
+                  Open a JSON file
+                </p>
               </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -55,7 +70,8 @@ export const Navbar = () => {
             aria-label="Select"
             variant="ghost"
             size="icon"
-            className="" //TODO
+            className={cn(activeTool === 'select' && 'bg-muted')}
+            onClick={() => onChangeActiveTool('select')}
           >
             <MousePointerClick className="size-4" />
           </Button>
@@ -117,28 +133,36 @@ export const Navbar = () => {
                 <CiFileOn className="size-8" />
                 <div>
                   <p>JSON</p>
-                  <p className="text-xs text-muted-foreground">Save for later editing</p>
+                  <p className="text-xs text-muted-foreground">
+                    Save for later editing
+                  </p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-x-2">
                 <CiFileOn className="size-8" />
                 <div>
                   <p>PNG</p>
-                  <p className="text-xs text-muted-foreground">Best for sharing</p>
+                  <p className="text-xs text-muted-foreground">
+                    Best for sharing
+                  </p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-x-2">
                 <CiFileOn className="size-8" />
                 <div>
                   <p>JPG</p>
-                  <p className="text-xs text-muted-foreground">Ideal for printing</p>
+                  <p className="text-xs text-muted-foreground">
+                    Ideal for printing
+                  </p>
                 </div>
               </DropdownMenuItem>
               <DropdownMenuItem className="flex items-center gap-x-2">
                 <CiFileOn className="size-8" />
                 <div>
                   <p>SVG</p>
-                  <p className="text-xs text-muted-foreground">For editing in vector software</p>
+                  <p className="text-xs text-muted-foreground">
+                    For editing in vector software
+                  </p>
                 </div>
               </DropdownMenuItem>
             </DropdownMenuContent>

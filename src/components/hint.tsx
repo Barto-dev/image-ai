@@ -1,6 +1,11 @@
 import { ReactNode } from 'react';
 import { TooltipContentProps } from '@radix-ui/react-tooltip';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 
 interface HintProps {
   label: string;
