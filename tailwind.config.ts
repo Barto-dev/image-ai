@@ -11,6 +11,8 @@ const config: Config = {
   theme: {
     extend: {
       spacing: {
+        18: '4.5rem',
+        90: '22.5rem',
         'editor-navbar': '68px',
         'editor-toolbar': '56px',
       },

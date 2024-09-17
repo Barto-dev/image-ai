@@ -30,6 +30,10 @@ body {
     text-wrap: balance;
   }
 
+  .center {
+    @apply flex items-center justify-center;
+  }
+
   .editor-height {
     height: calc(
       100% - (theme(space.editor-navbar) + theme(space.editor-toolbar))
