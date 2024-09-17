@@ -1,7 +1,99 @@
 import { fabric } from 'fabric';
-import { useCallback, useState } from 'react';
+import { useCallback, useState, useMemo } from 'react';
 
 import { useAutoResize } from './useAutoResize';
+import { BuildEditor } from '../types';
+import {
+  CIRCLE_OPTIONS,
+  RECTANGLE_OPTIONS,
+  WORKSPACE_NAME,
+  TRIANGLE_OPTIONS,
+  DEFAULT_SHAPE_HEIGHT,
+  DEFAULT_SHAPE_WIDTH,
+  DIAMOND_OPTIONS,
+} from '../constants';
+
+const buildEditor: BuildEditor = ({ canvas }) => {
+  const getWorkspace = () => {
+    return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
+  };
+
+  const center = (object: fabric.Object) => {
+    const workspace = getWorkspace();
+    const center = workspace?.getCenterPoint();
+    if (!center) {
+      return;
+    }
+    // @ts-ignore
+    canvas._centerObject(object, center);
+  };
+
+  const addToCanvas = (object: fabric.Object) => {
+    canvas.viewportCenterObject(object);
+    canvas.add(object);
+    canvas.setActiveObject(object);
+  };
+
+  return {
+    addCircle: () => {
+      const object = new fabric.Circle({
+        ...CIRCLE_OPTIONS,
+      });
+      addToCanvas(object);
+    },
+    addSofRectangle: () => {
+      const object = new fabric.Rect({
+        ...RECTANGLE_OPTIONS,
+        rx: 20,
+        ry: 20,
+      });
+      addToCanvas(object);
+    },
+    addRectangle: () => {
+      const object = new fabric.Rect({
+        ...RECTANGLE_OPTIONS,
+      });
+      addToCanvas(object);
+    },
+    addTriangle: () => {
+      const object = new fabric.Triangle({
+        ...TRIANGLE_OPTIONS,
+      });
+      addToCanvas(object);
+    },
+    addInverseTriangle: () => {
+      const WIDTH = TRIANGLE_OPTIONS.width;
+      const HEIGHT = TRIANGLE_OPTIONS.height;
+      const object = new fabric.Polygon(
+        [
+          { x: 0, y: 0 },
+          { x: WIDTH, y: 0 },
+          { x: WIDTH / 2, y: HEIGHT },
+        ],
+        {
+          ...TRIANGLE_OPTIONS,
+        },
+      );
+      addToCanvas(object);
+    },
+    addDiamond: () => {
+      const WIDTH = DIAMOND_OPTIONS.width;
+      const HEIGHT = DIAMOND_OPTIONS.height;
+      const object = new fabric.Polygon(
+        [
+          { x: WIDTH / 2, y: 0 },
+          { x: WIDTH, y: HEIGHT / 2 },
+          { x: WIDTH / 2, y: HEIGHT },
+          { x: 0, y: HEIGHT / 2 },
+        ],
+        {
+          ...DIAMOND_OPTIONS,
+        },
+      );
+      addToCanvas(object);
+    },
+  };
+};
 
 type InitArgs = {
   initialCanvas: fabric.Canvas;
@@ -13,6 +105,13 @@ export const useEditor = () => {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
 
   useAutoResize({ canvas, container });
+
+  const editor = useMemo(() => {
+    if (canvas) {
+      return buildEditor({ canvas });
+    }
+    return undefined;
+  }, [canvas]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: InitArgs) => {
     fabric.Object.prototype.set({
@@ -28,7 +127,7 @@ export const useEditor = () => {
     const initialWorkspace = new fabric.Rect({
       width: 900,
       height: 1200,
-      name: 'clip',
+      name: WORKSPACE_NAME,
       fill: 'white',
       selectable: false,
       hasControls: false,
@@ -47,5 +146,6 @@ export const useEditor = () => {
   }, []);
   return {
     init,
+    editor,
   };
 };
