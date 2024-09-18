@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useAutoResize } from './useAutoResize';
-import { BuildEditor } from '../types';
+import { BuildEditor, UseEditorProps } from '../types';
 import {
   CIRCLE_OPTIONS,
   DIAMOND_OPTIONS,
@@ -26,24 +26,29 @@ const buildEditor: BuildEditor = ({
   setStrokeWidth,
   selectedObjects,
 }) => {
-  const getWorkspace = () => {
-    return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
-  };
-
-  const center = (object: fabric.Object) => {
-    const workspace = getWorkspace();
-    const center = workspace?.getCenterPoint();
-    if (!center) {
-      return;
-    }
-    // @ts-ignore
-    canvas._centerObject(object, center);
-  };
-
   const addToCanvas = (object: fabric.Object) => {
     canvas.viewportCenterObject(object);
     canvas.add(object);
     canvas.setActiveObject(object);
+  };
+
+  const getActiveFillColor = () => {
+    const selectedObject = selectedObjects[0];
+    if (!selectedObject) {
+      return fillColor;
+    }
+
+    // currently we don't use gradients or patterns
+    return (selectedObject.get('fill') as string) || fillColor;
+  };
+
+  const getActiveStrokeColor = () => {
+    const selectedObject = selectedObjects[0];
+    if (!selectedObject) {
+      return strokeColor;
+    }
+
+    return selectedObject.get('stroke') || strokeColor;
   };
 
   return {
@@ -157,8 +162,8 @@ const buildEditor: BuildEditor = ({
       addToCanvas(object);
     },
     canvas,
-    fillColor,
-    strokeColor,
+    getActiveFillColor,
+    getActiveStrokeColor,
     strokeWidth,
     selectedObjects,
   };
@@ -169,7 +174,7 @@ type InitArgs = {
   initialContainer: HTMLDivElement;
 };
 
-export const useEditor = () => {
+export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
@@ -179,7 +184,7 @@ export const useEditor = () => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
 
   useAutoResize({ canvas, container });
-  useCanvasEvents({ canvas, setSelectedObjects });
+  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
   const editor = useMemo(() => {
     if (canvas) {

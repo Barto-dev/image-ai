@@ -1,5 +1,4 @@
 import { ActiveTool, BuildEditor } from '../types';
-import { useState } from 'react';
 import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -15,7 +14,8 @@ export const Toolbar = ({
   activeTool,
   onChangeActiveTool,
 }: ToolbarProps) => {
-  const fillColor = editor?.fillColor;
+  const fillColor = editor?.getActiveFillColor();
+  const strokeColor = editor?.getActiveStrokeColor();
   const selectedObjects = editor?.selectedObjects;
 
   if (!selectedObjects?.length) {
@@ -42,6 +42,27 @@ export const Toolbar = ({
               className="rounded-sm size-4 border"
               style={{
                 backgroundColor: fillColor,
+              }}
+            />
+          </Button>
+        </Hint>
+      </div>
+      <div className="center h-full">
+        <Hint
+          label="Border color"
+          side="bottom"
+          sideOffset={5}
+        >
+          <Button
+            className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
+            size="icon"
+            variant="ghost"
+            onClick={() => onChangeActiveTool('stroke-color')}
+          >
+            <span
+              className="rounded-sm size-4 border-2 bg-white"
+              style={{
+                borderColor: strokeColor,
               }}
             />
           </Button>

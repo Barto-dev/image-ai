@@ -5,6 +5,17 @@ import {
 } from 'fabric/fabric-impl';
 
 import * as material from 'material-colors';
+import { ActiveTool } from './types';
+
+export const SELECTION_DEPENDENT_TOOLS: ActiveTool[] = [
+  'fill',
+  'filter',
+  'font',
+  'opacity',
+  'remove-bg',
+  'stroke-color',
+  'stroke-width',
+];
 
 export const MATERIAL_COLORS = [
   material.red['500'],

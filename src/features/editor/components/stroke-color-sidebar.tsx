@@ -4,45 +4,45 @@ import { ToolSidebarHeader } from './tool-sidebar-header';
 import { ToolSidebarClose } from './tool-sidebar-close';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ColorPicker } from './color-picker';
-import { FILL_COLOR } from '@/features/editor/constants';
+import { STROKE_COLOR } from '@/features/editor/constants';
 
-interface FillColorSidebarProps {
+interface StrokeColorSidebarProps {
   editor: ReturnType<BuildEditor> | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
 // TODO: reuse the same parts in ColorSidebar component
-export const FillColorSidebar = ({
+export const StrokeColorSidebar = ({
   editor,
   activeTool,
   onChangeActiveTool,
-}: FillColorSidebarProps) => {
-  const fillColor = editor?.getActiveFillColor() || FILL_COLOR;
+}: StrokeColorSidebarProps) => {
+  const fillColor = editor?.getActiveStrokeColor() || STROKE_COLOR;
   const onClose = () => {
     onChangeActiveTool('select');
   };
 
-  const onChangeFillColor = (color: string) => {
-    editor?.changeFillColor(color);
+  const onChangeStrokeColor = (color: string) => {
+    editor?.changeStrokeColor(color);
   };
 
   return (
     <aside
       className={cn(
         'bg-white relative border-r z-40 w-90 h-full flex-col hidden',
-        activeTool === 'fill' && 'flex',
+        activeTool === 'stroke-color' && 'flex',
       )}
     >
       <ToolSidebarHeader
-        title="Fill Color"
-        description="Add fill color to your element"
+        title="Border Color"
+        description="Change the border color of your element"
       />
       <ScrollArea>
         <div className="p-4 space-y-6">
           <ColorPicker
             value={fillColor}
-            onChange={onChangeFillColor}
+            onChange={onChangeStrokeColor}
           />
         </div>
       </ScrollArea>

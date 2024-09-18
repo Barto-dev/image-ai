@@ -38,9 +38,13 @@ export type BuildEditor = (props: BuildEditorProps) => {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
-  fillColor: string;
-  strokeColor: string;
+  getActiveFillColor: () => string;
+  getActiveStrokeColor: () => string;
   strokeWidth: number;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
+};
+
+export type UseEditorProps = {
+  clearSelectionCallback?: () => void;
 };
