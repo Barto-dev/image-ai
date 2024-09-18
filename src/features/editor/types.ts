@@ -17,15 +17,30 @@ export type ActiveTool =
   | 'remove-bg'
   | 'templates';
 
-export type BuildEditorProps = {
+type BuildEditorProps = {
   canvas: fabric.Canvas;
+  fillColor: string;
+  setFillColor: (color: string) => void;
+  strokeColor: string;
+  setStrokeColor: (color: string) => void;
+  strokeWidth: number;
+  setStrokeWidth: (width: number) => void;
+  selectedObjects: fabric.Object[];
 };
 
 export type BuildEditor = (props: BuildEditorProps) => {
+  changeFillColor: (color: string) => void;
+  changeStrokeColor: (color: string) => void;
+  changeStrokeWidth: (width: number) => void;
   addCircle: () => void;
   addSofRectangle: () => void;
   addRectangle: () => void;
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
+  fillColor: string;
+  strokeColor: string;
+  strokeWidth: number;
+  canvas: fabric.Canvas;
+  selectedObjects: fabric.Object[];
 };

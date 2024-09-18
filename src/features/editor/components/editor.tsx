@@ -9,6 +9,7 @@ import { Toolbar } from './toolbar';
 import { Footer } from './footer';
 import { ShapeSidebar } from './shape-sidebar';
 import { ActiveTool } from '../types';
+import { FillColorSidebar } from './fill-color-sidebar';
 
 export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
@@ -69,8 +70,19 @@ export const Editor = () => {
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
         />
+        <FillColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
         <main className="bg-muted flex-1 overflow-auto relative flex flex-col">
-          <Toolbar />
+          <Toolbar
+            // we need to re-render the toolbar when the active object changes
+            key={JSON.stringify(editor?.canvas?.getActiveObject())}
+            editor={editor}
+            activeTool={activeTool}
+            onChangeActiveTool={onChangeActiveTool}
+          />
           <div
             className="flex-1 editor-height bg-muted"
             ref={containerRef}
