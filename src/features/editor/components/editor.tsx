@@ -35,6 +35,7 @@ export const Editor = () => {
     }
     const canvas = new fabric.Canvas(canvasRef.current, {
       controlsAboveOverlay: true,
+      // to preserve the stacking order of objects when user selects them
       preserveObjectStacking: true,
     });
     init({

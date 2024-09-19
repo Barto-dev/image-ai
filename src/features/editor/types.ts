@@ -31,6 +31,8 @@ type BuildEditorProps = {
 };
 
 export type BuildEditor = (props: BuildEditorProps) => {
+  bringForward: () => void;
+  sendBackwards: () => void;
   changeFillColor: (color: string) => void;
   changeStrokeColor: (color: string) => void;
   changeStrokeWidth: (width: number) => void;

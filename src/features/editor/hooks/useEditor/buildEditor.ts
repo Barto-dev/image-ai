@@ -10,6 +10,7 @@ import {
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
   TRIANGLE_OPTIONS,
+  WORKSPACE_NAME,
 } from '@/features/editor/constants';
 
 const getActiveProperty = <T>(
@@ -36,6 +37,10 @@ export const buildEditor: BuildEditor = ({
   setStrokeDashArray,
   selectedObjects,
 }) => {
+  const getWorkspace = () => {
+    return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
+  };
+
   const addToCanvas = (object: fabric.Object) => {
     canvas.viewportCenterObject(object);
     canvas.add(object);
@@ -55,6 +60,24 @@ export const buildEditor: BuildEditor = ({
     getActiveProperty('strokeDashArray', strokeDashArray, selectedObjects);
 
   return {
+    bringForward: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.bringForward(object);
+      });
+      canvas.renderAll();
+    },
+
+    sendBackwards: () => {
+      canvas.getActiveObjects().forEach((object) => {
+        canvas.sendBackwards(object);
+      });
+      canvas.renderAll();
+
+      // to prevent shapes from being moved behind the workspace
+      const workspace = getWorkspace();
+      workspace?.sendToBack();
+    },
+
     changeFillColor: (color: string) => {
       setFillColor(color);
       canvas.getActiveObjects().forEach((object) => {
