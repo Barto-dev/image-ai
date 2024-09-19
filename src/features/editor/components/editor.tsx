@@ -1,6 +1,6 @@
 'use client';
 
-import { useEditor } from '@/features/editor/hooks/useEditor';
+import { useEditor } from '@/features/editor/hooks/useEditor/useEditor';
 import { fabric } from 'fabric';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Navbar } from './navbar';
@@ -12,6 +12,7 @@ import { ActiveTool } from '../types';
 import { FillColorSidebar } from './fill-color-sidebar';
 import { SELECTION_DEPENDENT_TOOLS } from '@/features/editor/constants';
 import { StrokeColorSidebar } from '@/features/editor/components/stroke-color-sidebar';
+import { StrokeWidthSidebar } from '@/features/editor/components/stroke-width-sidebar';
 
 export const Editor = () => {
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
@@ -87,6 +88,11 @@ export const Editor = () => {
           onChangeActiveTool={onChangeActiveTool}
         />
         <StrokeColorSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <StrokeWidthSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}

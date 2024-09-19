@@ -1,10 +1,10 @@
 import { ActiveTool, BuildEditor } from '../types';
-import { cn } from '@/lib/utils';
 import { ToolSidebarHeader } from './tool-sidebar-header';
 import { ToolSidebarClose } from './tool-sidebar-close';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ColorPicker } from './color-picker';
 import { FILL_COLOR } from '@/features/editor/constants';
+import { SidebarWrapper } from './sidebar-wrapper';
 
 interface FillColorSidebarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -12,7 +12,6 @@ interface FillColorSidebarProps {
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-// TODO: reuse the same parts in ColorSidebar component
 export const FillColorSidebar = ({
   editor,
   activeTool,
@@ -28,11 +27,9 @@ export const FillColorSidebar = ({
   };
 
   return (
-    <aside
-      className={cn(
-        'bg-white relative border-r z-40 w-90 h-full flex-col hidden',
-        activeTool === 'fill' && 'flex',
-      )}
+    <SidebarWrapper
+      activeTool={activeTool}
+      sidebarTool="fill"
     >
       <ToolSidebarHeader
         title="Fill Color"
@@ -47,6 +44,6 @@ export const FillColorSidebar = ({
         </div>
       </ScrollArea>
       <ToolSidebarClose onClick={onClose} />
-    </aside>
+    </SidebarWrapper>
   );
 };

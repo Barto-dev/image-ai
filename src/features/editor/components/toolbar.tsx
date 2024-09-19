@@ -2,6 +2,7 @@ import { ActiveTool, BuildEditor } from '../types';
 import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { BsBorderWidth } from 'react-icons/bs';
 
 interface ToolbarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -65,6 +66,22 @@ export const Toolbar = ({
                 borderColor: strokeColor,
               }}
             />
+          </Button>
+        </Hint>
+      </div>
+      <div className="center h-full">
+        <Hint
+          label="Border width"
+          side="bottom"
+          sideOffset={5}
+        >
+          <Button
+            className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
+            size="icon"
+            variant="ghost"
+            onClick={() => onChangeActiveTool('stroke-width')}
+          >
+            <BsBorderWidth className="size-4" />
           </Button>
         </Hint>
       </div>

@@ -25,6 +25,8 @@ type BuildEditorProps = {
   setStrokeColor: (color: string) => void;
   strokeWidth: number;
   setStrokeWidth: (width: number) => void;
+  strokeDashArray: number[];
+  setStrokeDashArray: (dashArray: number[]) => void;
   selectedObjects: fabric.Object[];
 };
 
@@ -32,6 +34,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   changeFillColor: (color: string) => void;
   changeStrokeColor: (color: string) => void;
   changeStrokeWidth: (width: number) => void;
+  changeStrokeDashArray: (dashArray: number[]) => void;
   addCircle: () => void;
   addSofRectangle: () => void;
   addRectangle: () => void;
@@ -40,7 +43,8 @@ export type BuildEditor = (props: BuildEditorProps) => {
   addDiamond: () => void;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
-  strokeWidth: number;
+  getActiveStrokeWidth: () => number;
+  getActiveStrokeDashArray: () => number[];
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
 };

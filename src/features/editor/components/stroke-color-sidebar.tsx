@@ -1,10 +1,10 @@
 import { ActiveTool, BuildEditor } from '../types';
-import { cn } from '@/lib/utils';
 import { ToolSidebarHeader } from './tool-sidebar-header';
 import { ToolSidebarClose } from './tool-sidebar-close';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { ColorPicker } from './color-picker';
 import { STROKE_COLOR } from '@/features/editor/constants';
+import { SidebarWrapper } from './sidebar-wrapper';
 
 interface StrokeColorSidebarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -12,7 +12,6 @@ interface StrokeColorSidebarProps {
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-// TODO: reuse the same parts in ColorSidebar component
 export const StrokeColorSidebar = ({
   editor,
   activeTool,
@@ -28,11 +27,9 @@ export const StrokeColorSidebar = ({
   };
 
   return (
-    <aside
-      className={cn(
-        'bg-white relative border-r z-40 w-90 h-full flex-col hidden',
-        activeTool === 'stroke-color' && 'flex',
-      )}
+    <SidebarWrapper
+      activeTool={activeTool}
+      sidebarTool="stroke-color"
     >
       <ToolSidebarHeader
         title="Border Color"
@@ -47,6 +44,6 @@ export const StrokeColorSidebar = ({
         </div>
       </ScrollArea>
       <ToolSidebarClose onClick={onClose} />
-    </aside>
+    </SidebarWrapper>
   );
 };
