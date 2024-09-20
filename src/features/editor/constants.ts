@@ -31,6 +31,11 @@ export const DEFAULT_OPACITY = 1;
 
 export const DEFAULT_FONT_FAMILY = 'Arial';
 export const DEFAULT_FONT_SIZE = 40;
+export const DEFAULT_FONT_WEIGHT = 400;
+export const DEFAULT_FONT_STYLE = 'normal';
+export const DEFAULT_FONT_LINETHROUGH = false;
+export const DEFAULT_FONT_UNDERLINE = false;
+export const DEFAULT_TEXT_ALIGN = 'left';
 
 export const CIRCLE_OPTIONS = {
   radius: 75,

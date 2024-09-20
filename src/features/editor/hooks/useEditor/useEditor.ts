@@ -2,10 +2,15 @@ import { fabric } from 'fabric';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useAutoResize } from '../useAutoResize';
-import { UseEditorProps } from '../../types';
+import { FontStyle, TextAlign, UseEditorProps } from '../../types';
 import {
   DEFAULT_FONT_FAMILY,
+  DEFAULT_FONT_LINETHROUGH,
+  DEFAULT_FONT_STYLE,
+  DEFAULT_FONT_UNDERLINE,
+  DEFAULT_FONT_WEIGHT,
   DEFAULT_OPACITY,
+  DEFAULT_TEXT_ALIGN,
   FILL_COLOR,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -32,6 +37,13 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     useState<number[]>(STROKE_DASH_ARRAY);
   const [opacity, setOpacity] = useState(DEFAULT_OPACITY);
   const [fontFamily, setFontFamily] = useState(DEFAULT_FONT_FAMILY);
+  const [fontWeight, setFontWeight] = useState(DEFAULT_FONT_WEIGHT);
+  const [fontStyle, setFontStyle] = useState<FontStyle>(DEFAULT_FONT_STYLE);
+  const [fontLinethrough, setFontLinethrough] = useState(
+    DEFAULT_FONT_LINETHROUGH,
+  );
+  const [fontUnderline, setFontUnderline] = useState(DEFAULT_FONT_UNDERLINE);
+  const [textAlign, setTextAlign] = useState<TextAlign>(DEFAULT_TEXT_ALIGN);
 
   useAutoResize({ canvas, container });
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
@@ -52,6 +64,16 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         setOpacity,
         fontFamily,
         setFontFamily,
+        fontWeight,
+        setFontWeight,
+        fontStyle,
+        setFontStyle,
+        fontLinethrough,
+        setFontLinethrough,
+        fontUnderline,
+        setFontUnderline,
+        textAlign,
+        setTextAlign,
         selectedObjects,
       });
     }
@@ -65,6 +87,11 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     strokeDashArray,
     opacity,
     fontFamily,
+    fontWeight,
+    fontStyle,
+    fontUnderline,
+    fontLinethrough,
+    textAlign,
   ]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: InitArgs) => {

@@ -3,9 +3,17 @@ import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { BsBorderWidth } from 'react-icons/bs';
-import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
+import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
+  ArrowDown,
+  ArrowUp,
+  ChevronDown,
+} from 'lucide-react';
 import { RxTransparencyGrid } from 'react-icons/rx';
 import { isFabricTextType } from '@/features/editor/utils';
+import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 
 interface ToolbarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -20,9 +28,36 @@ export const Toolbar = ({
 }: ToolbarProps) => {
   const fillColor = editor?.getActiveFillColor();
   const font = editor?.getActiveFontFamily();
+  const fontWeight = editor?.getActiveFontWeight();
+  const fontStyle = editor?.getActiveFontStyle();
+  const fontLinethrough = editor?.getActiveFontLinethrough();
+  const fontUnderline = editor?.getActiveFontUnderline();
+  const textAlign = editor?.getActiveTextAlign();
   const strokeColor = editor?.getActiveStrokeColor();
   const selectedObjects = editor?.selectedObjects;
   const isSelectedText = isFabricTextType(selectedObjects?.[0]?.type);
+
+  const changeFontWeight = () => {
+    const activeFontWeight = editor?.getActiveFontWeight();
+    const newValue = Number(activeFontWeight) > 400 ? 400 : 700;
+    editor?.changeFontWeight(newValue);
+  };
+
+  const changeFontStyle = () => {
+    const activeFontStyle = editor?.getActiveFontStyle();
+    const newValue = activeFontStyle === 'italic' ? 'normal' : 'italic';
+    editor?.changeFontStyle(newValue);
+  };
+
+  const changeFontLinethrough = () => {
+    const activeFontLinethrough = editor?.getActiveFontLinethrough();
+    editor?.changeFontLinethrough(!activeFontLinethrough);
+  };
+
+  const changeFontUnderline = () => {
+    const activeFontUnderline = editor?.getActiveFontUnderline();
+    editor?.changeFontUnderline(!activeFontUnderline);
+  };
 
   if (!selectedObjects?.length) {
     return (
@@ -110,6 +145,132 @@ export const Toolbar = ({
             >
               <span className="max-w-24 truncate">{font}</span>
               <ChevronDown className="size-4 ml-2 shrink-0" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Bold"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              size="icon"
+              variant={Number(fontWeight) > 400 ? 'secondary' : 'ghost'}
+              onClick={changeFontWeight}
+            >
+              <FaBold className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Bold"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              size="icon"
+              variant={fontStyle === 'italic' ? 'secondary' : 'ghost'}
+              onClick={changeFontStyle}
+            >
+              <FaItalic className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Linethrough"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              size="icon"
+              variant={fontLinethrough ? 'secondary' : 'ghost'}
+              onClick={changeFontLinethrough}
+            >
+              <FaStrikethrough className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Underline"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              size="icon"
+              variant={fontUnderline ? 'secondary' : 'ghost'}
+              onClick={changeFontUnderline}
+            >
+              <FaUnderline className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Align left"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              size="icon"
+              variant={textAlign === 'left' ? 'secondary' : 'ghost'}
+              onClick={() => editor?.changeTextAlign('left')}
+            >
+              <AlignLeft className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Align center"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              size="icon"
+              variant={textAlign === 'center' ? 'secondary' : 'ghost'}
+              onClick={() => editor?.changeTextAlign('center')}
+            >
+              <AlignCenter className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Align right"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              size="icon"
+              variant={textAlign === 'right' ? 'secondary' : 'ghost'}
+              onClick={() => editor?.changeTextAlign('right')}
+            >
+              <AlignRight className="size-4" />
             </Button>
           </Hint>
         </div>

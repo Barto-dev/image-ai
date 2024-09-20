@@ -1,4 +1,4 @@
-import { BuildEditor } from '@/features/editor/types';
+import { BuildEditor, TextAlign } from '@/features/editor/types';
 import { fabric } from 'fabric';
 import { isFabricTextType, isTextboxObject } from '@/features/editor/utils';
 import {
@@ -41,6 +41,16 @@ export const buildEditor: BuildEditor = ({
   setOpacity,
   fontFamily,
   setFontFamily,
+  setFontWeight,
+  fontWeight,
+  fontStyle,
+  setFontStyle,
+  fontLinethrough,
+  setFontLinethrough,
+  fontUnderline,
+  setFontUnderline,
+  textAlign,
+  setTextAlign,
   selectedObjects,
 }) => {
   const getWorkspace = () => {
@@ -69,12 +79,52 @@ export const buildEditor: BuildEditor = ({
   const getActiveOpacity = () =>
     getActiveProperty('opacity', DEFAULT_OPACITY, selectedObjects);
 
+  const getActiveTextAlign = () => {
+    const selectedObject = selectedObjects[0];
+    if (isTextboxObject(selectedObject)) {
+      return (selectedObject.get('textAlign') as TextAlign) || textAlign;
+    }
+    return textAlign;
+  };
+
+  const getActiveFontStyle = () => {
+    const selectedObject = selectedObjects[0];
+    if (isTextboxObject(selectedObject)) {
+      return selectedObject.get('fontStyle') || fontStyle;
+    }
+    return fontStyle;
+  };
+
   const getActiveFontFamily = () => {
     const selectedObject = selectedObjects[0];
     if (isTextboxObject(selectedObject)) {
       return selectedObject.get('fontFamily') || fontFamily;
     }
     return fontFamily;
+  };
+
+  const getActiveFontWeight = () => {
+    const selectedObject = selectedObjects[0];
+    if (isTextboxObject(selectedObject)) {
+      return (selectedObject.get('fontWeight') as number) || fontWeight;
+    }
+    return fontWeight;
+  };
+
+  const getActiveFontLinethrough = () => {
+    const selectedObject = selectedObjects[0];
+    if (isTextboxObject(selectedObject)) {
+      return !!selectedObject.get('linethrough');
+    }
+    return fontLinethrough;
+  };
+
+  const getActiveFontUnderline = () => {
+    const selectedObject = selectedObjects[0];
+    if (isTextboxObject(selectedObject)) {
+      return !!selectedObject.get('underline');
+    }
+    return fontUnderline;
   };
 
   return {
@@ -96,7 +146,57 @@ export const buildEditor: BuildEditor = ({
       workspace?.sendToBack();
     },
 
-    changeFontFamily: (fontFamily: string) => {
+    changeTextAlign: (textAlign) => {
+      setTextAlign(textAlign);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextboxObject(object)) {
+          object.set({ textAlign });
+        }
+      });
+      canvas.renderAll();
+    },
+
+    changeFontUnderline: (underline) => {
+      setFontUnderline(underline);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextboxObject(object)) {
+          object.set({ underline });
+        }
+      });
+      canvas.renderAll();
+    },
+
+    changeFontLinethrough: (linethrough) => {
+      setFontLinethrough(linethrough);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextboxObject(object)) {
+          object.set({ linethrough });
+        }
+      });
+      canvas.renderAll();
+    },
+
+    changeFontStyle: (fontStyle) => {
+      setFontStyle(fontStyle);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextboxObject(object)) {
+          object.set({ fontStyle });
+        }
+      });
+      canvas.renderAll();
+    },
+
+    changeFontWeight: (fontWeight) => {
+      setFontWeight(fontWeight);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextboxObject(object)) {
+          object.set({ fontWeight });
+        }
+      });
+      canvas.renderAll();
+    },
+
+    changeFontFamily: (fontFamily) => {
       setFontFamily(fontFamily);
       canvas.getActiveObjects().forEach((object) => {
         if (isTextboxObject(object)) {
@@ -106,7 +206,7 @@ export const buildEditor: BuildEditor = ({
       canvas.renderAll();
     },
 
-    changeFillColor: (color: string) => {
+    changeFillColor: (color) => {
       setFillColor(color);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ fill: color });
@@ -114,7 +214,7 @@ export const buildEditor: BuildEditor = ({
       canvas.renderAll();
     },
 
-    changeStrokeColor: (color: string) => {
+    changeStrokeColor: (color) => {
       setStrokeColor(color);
       canvas.getActiveObjects().forEach((object) => {
         // Text types don't have stroke property
@@ -127,7 +227,7 @@ export const buildEditor: BuildEditor = ({
       canvas.renderAll();
     },
 
-    changeStrokeWidth: (width: number) => {
+    changeStrokeWidth: (width) => {
       setStrokeWidth(width);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeWidth: width });
@@ -135,7 +235,7 @@ export const buildEditor: BuildEditor = ({
       canvas.renderAll();
     },
 
-    changeStrokeDashArray: (dashArray: number[]) => {
+    changeStrokeDashArray: (dashArray) => {
       setStrokeDashArray(dashArray);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeDashArray: dashArray });
@@ -143,7 +243,7 @@ export const buildEditor: BuildEditor = ({
       canvas.renderAll();
     },
 
-    changeOpacity: (opacity: number) => {
+    changeOpacity: (opacity) => {
       setOpacity(opacity);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ opacity });
@@ -254,6 +354,11 @@ export const buildEditor: BuildEditor = ({
     getActiveStrokeDashArray,
     getActiveOpacity,
     getActiveFontFamily,
+    getActiveFontWeight,
+    getActiveFontStyle,
+    getActiveFontLinethrough,
+    getActiveFontUnderline,
+    getActiveTextAlign,
     selectedObjects,
   };
 };

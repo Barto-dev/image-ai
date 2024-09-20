@@ -1,6 +1,10 @@
 import { fabric } from 'fabric';
 import { ITextboxOptions } from 'fabric/fabric-impl';
 
+export type FontStyle = ITextboxOptions['fontStyle'];
+
+export type TextAlign = 'left' | 'center' | 'right';
+
 export type ActiveTool =
   | 'select'
   | 'shapes'
@@ -32,6 +36,16 @@ type BuildEditorProps = {
   setOpacity: (opacity: number) => void;
   fontFamily: string;
   setFontFamily: (fontFamily: string) => void;
+  fontWeight: number;
+  setFontWeight: (fontWeight: number) => void;
+  fontStyle: FontStyle;
+  setFontStyle: (fontStyle: FontStyle) => void;
+  fontLinethrough: boolean;
+  setFontLinethrough: (linethrough: boolean) => void;
+  fontUnderline: boolean;
+  setFontUnderline: (underline: boolean) => void;
+  textAlign: TextAlign;
+  setTextAlign: (textAlign: TextAlign) => void;
   selectedObjects: fabric.Object[];
 };
 
@@ -44,6 +58,11 @@ export type BuildEditor = (props: BuildEditorProps) => {
   changeStrokeDashArray: (dashArray: number[]) => void;
   changeOpacity: (opacity: number) => void;
   changeFontFamily: (fontFamily: string) => void;
+  changeFontWeight: (fontWeight: number) => void;
+  changeFontStyle: (fontStyle: FontStyle) => void;
+  changeFontLinethrough: (linethrough: boolean) => void;
+  changeFontUnderline: (underline: boolean) => void;
+  changeTextAlign: (textAlign: TextAlign) => void;
   addCircle: () => void;
   addSofRectangle: () => void;
   addRectangle: () => void;
@@ -57,6 +76,11 @@ export type BuildEditor = (props: BuildEditorProps) => {
   getActiveStrokeDashArray: () => number[];
   getActiveOpacity: () => number;
   getActiveFontFamily: () => string;
+  getActiveFontWeight: () => number;
+  getActiveFontStyle: () => FontStyle;
+  getActiveFontLinethrough: () => boolean;
+  getActiveFontUnderline: () => boolean;
+  getActiveTextAlign: () => TextAlign;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
 };
