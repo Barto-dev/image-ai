@@ -3,7 +3,7 @@ import { Hint } from '@/components/hint';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { BsBorderWidth } from 'react-icons/bs';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowUp, ChevronDown } from 'lucide-react';
 import { RxTransparencyGrid } from 'react-icons/rx';
 import { isFabricTextType } from '@/features/editor/utils';
 
@@ -19,6 +19,7 @@ export const Toolbar = ({
   onChangeActiveTool,
 }: ToolbarProps) => {
   const fillColor = editor?.getActiveFillColor();
+  const font = editor?.getActiveFontFamily();
   const strokeColor = editor?.getActiveStrokeColor();
   const selectedObjects = editor?.selectedObjects;
   const isSelectedText = isFabricTextType(selectedObjects?.[0]?.type);
@@ -90,6 +91,25 @@ export const Toolbar = ({
               onClick={() => onChangeActiveTool('stroke-width')}
             >
               <BsBorderWidth className="size-4" />
+            </Button>
+          </Hint>
+        </div>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <Hint
+            label="Font"
+            side="bottom"
+            sideOffset={5}
+          >
+            <Button
+              className={cn(activeTool === 'font' && 'bg-gray-100')}
+              variant="ghost"
+              onClick={() => onChangeActiveTool('font')}
+            >
+              <span className="max-w-24 truncate">{font}</span>
+              <ChevronDown className="size-4 ml-2 shrink-0" />
             </Button>
           </Hint>
         </div>

@@ -30,6 +30,8 @@ type BuildEditorProps = {
   setStrokeDashArray: (dashArray: number[]) => void;
   opacity: number;
   setOpacity: (opacity: number) => void;
+  fontFamily: string;
+  setFontFamily: (fontFamily: string) => void;
   selectedObjects: fabric.Object[];
 };
 
@@ -41,6 +43,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   changeStrokeWidth: (width: number) => void;
   changeStrokeDashArray: (dashArray: number[]) => void;
   changeOpacity: (opacity: number) => void;
+  changeFontFamily: (fontFamily: string) => void;
   addCircle: () => void;
   addSofRectangle: () => void;
   addRectangle: () => void;
@@ -53,6 +56,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   getActiveStrokeWidth: () => number;
   getActiveStrokeDashArray: () => number[];
   getActiveOpacity: () => number;
+  getActiveFontFamily: () => string;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
 };

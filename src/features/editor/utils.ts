@@ -1,4 +1,5 @@
 import { RGBColor } from 'react-color';
+import { fabric } from 'fabric';
 
 export const isFabricTextType = (type: string | undefined) => {
   return type === 'text' || type === 'i-text' || type === 'textbox';
@@ -9,4 +10,8 @@ export const rgbaObjectToString = (rgba: RGBColor | 'transparent') => {
     return 'rgba(0, 0, 0, 0)';
   }
   return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a || 1})`;
+};
+
+export const isTextboxObject = (object: fabric.Object | null) => {
+  return object instanceof fabric.Textbox;
 };

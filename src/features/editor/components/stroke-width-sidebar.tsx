@@ -55,26 +55,20 @@ export const StrokeWidthSidebar = ({
         <div className="p-4 space-y-4 border-b">
           <Label className="text-sm">Border type</Label>
           <Button
-            variant="ghost"
+            variant={!strokeDashArray.length ? 'default' : 'secondary'}
             size="lg"
-            className={cn(
-              'w-full h-16 justify-start text-left py-2 px-4',
-              !strokeDashArray.length && 'bg-muted',
-            )}
+            className={cn('w-full h-16 justify-start text-left py-2 px-4')}
             onClick={() => onChangeStrokeType([])}
           >
-            <span className="w-full border-black rounded-full border-4" />
+            <span className="w-full border-current rounded-full border-4" />
           </Button>
           <Button
-            variant="ghost"
+            variant={!!strokeDashArray.length ? 'default' : 'secondary'}
             size="lg"
-            className={cn(
-              'w-full h-16 justify-start text-left py-2 px-4',
-              !!strokeDashArray.length && 'bg-muted',
-            )}
+            className="w-full h-16 justify-start text-left py-2 px-4"
             onClick={() => onChangeStrokeType([5, 5])}
           >
-            <span className="w-full border-black rounded-full border-4 border-dashed" />
+            <span className="w-full border-current rounded-full border-4 border-dashed" />
           </Button>
         </div>
       </ScrollArea>

@@ -1,8 +1,9 @@
 import { BuildEditor } from '@/features/editor/types';
 import { fabric } from 'fabric';
-import { isFabricTextType } from '@/features/editor/utils';
+import { isFabricTextType, isTextboxObject } from '@/features/editor/utils';
 import {
   CIRCLE_OPTIONS,
+  DEFAULT_FONT_FAMILY,
   DEFAULT_OPACITY,
   DIAMOND_OPTIONS,
   FILL_COLOR,
@@ -38,6 +39,8 @@ export const buildEditor: BuildEditor = ({
   strokeDashArray,
   setStrokeDashArray,
   setOpacity,
+  fontFamily,
+  setFontFamily,
   selectedObjects,
 }) => {
   const getWorkspace = () => {
@@ -66,6 +69,14 @@ export const buildEditor: BuildEditor = ({
   const getActiveOpacity = () =>
     getActiveProperty('opacity', DEFAULT_OPACITY, selectedObjects);
 
+  const getActiveFontFamily = () => {
+    const selectedObject = selectedObjects[0];
+    if (isTextboxObject(selectedObject)) {
+      return selectedObject.get('fontFamily') || fontFamily;
+    }
+    return fontFamily;
+  };
+
   return {
     bringForward: () => {
       canvas.getActiveObjects().forEach((object) => {
@@ -83,6 +94,16 @@ export const buildEditor: BuildEditor = ({
       // to prevent shapes from being moved behind the workspace
       const workspace = getWorkspace();
       workspace?.sendToBack();
+    },
+
+    changeFontFamily: (fontFamily: string) => {
+      setFontFamily(fontFamily);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextboxObject(object)) {
+          object.set({ fontFamily });
+        }
+      });
+      canvas.renderAll();
     },
 
     changeFillColor: (color: string) => {
@@ -133,6 +154,7 @@ export const buildEditor: BuildEditor = ({
     addText: (value, options) => {
       const object = new fabric.Textbox(value, {
         fill: fillColor || FILL_COLOR,
+        fontFamily: fontFamily || DEFAULT_FONT_FAMILY,
         ...TEXTBOX_OPTIONS,
         ...options,
       });
@@ -231,6 +253,7 @@ export const buildEditor: BuildEditor = ({
     getActiveStrokeWidth,
     getActiveStrokeDashArray,
     getActiveOpacity,
+    getActiveFontFamily,
     selectedObjects,
   };
 };

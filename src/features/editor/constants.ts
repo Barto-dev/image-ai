@@ -18,28 +18,6 @@ export const SELECTION_DEPENDENT_TOOLS: ActiveTool[] = [
   'stroke-width',
 ];
 
-export const MATERIAL_COLORS = [
-  material.red['500'],
-  material.pink['500'],
-  material.purple['500'],
-  material.deepPurple['500'],
-  material.indigo['500'],
-  material.blue['500'],
-  material.lightBlue['500'],
-  material.cyan['500'],
-  material.teal['500'],
-  material.green['500'],
-  material.lightGreen['500'],
-  material.lime['500'],
-  material.yellow['500'],
-  material.amber['500'],
-  material.orange['500'],
-  material.deepOrange['500'],
-  material.brown['500'],
-  material.blueGrey['500'],
-  'transparent',
-];
-
 export const WORKSPACE_NAME = 'clip';
 
 export const DEFAULT_SHAPE_WIDTH = 150;
@@ -82,5 +60,47 @@ export const TEXTBOX_OPTIONS = {
   left: 100,
   top: 100,
   fontSize: DEFAULT_FONT_SIZE,
-  fontFamily: DEFAULT_FONT_FAMILY,
 } as const satisfies ITextboxOptions;
+
+export const MATERIAL_COLORS = [
+  material.red['500'],
+  material.pink['500'],
+  material.purple['500'],
+  material.deepPurple['500'],
+  material.indigo['500'],
+  material.blue['500'],
+  material.lightBlue['500'],
+  material.cyan['500'],
+  material.teal['500'],
+  material.green['500'],
+  material.lightGreen['500'],
+  material.lime['500'],
+  material.yellow['500'],
+  material.amber['500'],
+  material.orange['500'],
+  material.deepOrange['500'],
+  material.brown['500'],
+  material.blueGrey['500'],
+  'transparent',
+];
+
+export const FONTS = [
+  'Arial Black',
+  'Arial',
+  'Bookman',
+  'Brush Script MT',
+  'Comic Sans MS',
+  'Courier New',
+  'Garamond',
+  'Geneva',
+  'Georgia',
+  'Helvetica',
+  'Impact',
+  'Lucida Console',
+  'Palatino Linotype',
+  'Palatino',
+  'Tahoma',
+  'Times New Roman',
+  'Trebuchet MS',
+  'Verdana',
+];
