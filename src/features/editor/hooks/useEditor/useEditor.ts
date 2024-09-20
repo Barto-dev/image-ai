@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from 'react';
 import { useAutoResize } from '../useAutoResize';
 import { UseEditorProps } from '../../types';
 import {
+  DEFAULT_OPACITY,
   FILL_COLOR,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -28,6 +29,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [strokeWidth, setStrokeWidth] = useState(STROKE_WIDTH);
   const [strokeDashArray, setStrokeDashArray] =
     useState<number[]>(STROKE_DASH_ARRAY);
+  const [opacity, setOpacity] = useState(DEFAULT_OPACITY);
 
   useAutoResize({ canvas, container });
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
@@ -44,6 +46,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         strokeDashArray,
         setStrokeDashArray,
         setStrokeWidth,
+        opacity,
+        setOpacity,
         selectedObjects,
       });
     }
@@ -55,6 +59,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     strokeWidth,
     selectedObjects,
     strokeDashArray,
+    opacity,
   ]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: InitArgs) => {

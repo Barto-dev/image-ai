@@ -3,6 +3,7 @@ import { fabric } from 'fabric';
 import { isFabricTextType } from '@/features/editor/utils';
 import {
   CIRCLE_OPTIONS,
+  DEFAULT_OPACITY,
   DIAMOND_OPTIONS,
   FILL_COLOR,
   RECTANGLE_OPTIONS,
@@ -35,6 +36,7 @@ export const buildEditor: BuildEditor = ({
   setStrokeWidth,
   strokeDashArray,
   setStrokeDashArray,
+  setOpacity,
   selectedObjects,
 }) => {
   const getWorkspace = () => {
@@ -58,6 +60,10 @@ export const buildEditor: BuildEditor = ({
 
   const getActiveStrokeDashArray = () =>
     getActiveProperty('strokeDashArray', strokeDashArray, selectedObjects);
+
+  // for new objects, opacity is always 1 instead of previous object's opacity
+  const getActiveOpacity = () =>
+    getActiveProperty('opacity', DEFAULT_OPACITY, selectedObjects);
 
   return {
     bringForward: () => {
@@ -111,6 +117,14 @@ export const buildEditor: BuildEditor = ({
       setStrokeDashArray(dashArray);
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeDashArray: dashArray });
+      });
+      canvas.renderAll();
+    },
+
+    changeOpacity: (opacity: number) => {
+      setOpacity(opacity);
+      canvas.getActiveObjects().forEach((object) => {
+        object.set({ opacity });
       });
       canvas.renderAll();
     },
@@ -206,6 +220,7 @@ export const buildEditor: BuildEditor = ({
     getActiveStrokeColor,
     getActiveStrokeWidth,
     getActiveStrokeDashArray,
+    getActiveOpacity,
     selectedObjects,
   };
 };
