@@ -1,4 +1,5 @@
 import { fabric } from 'fabric';
+import { ITextboxOptions } from 'fabric/fabric-impl';
 
 export type ActiveTool =
   | 'select'
@@ -46,6 +47,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   addTriangle: () => void;
   addInverseTriangle: () => void;
   addDiamond: () => void;
+  addText: (value: string, options?: ITextboxOptions) => void;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;

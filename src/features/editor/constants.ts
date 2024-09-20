@@ -2,6 +2,7 @@ import {
   ICircleOptions,
   IRectOptions,
   ITriangleOptions,
+  ITextboxOptions,
 } from 'fabric/fabric-impl';
 
 import * as material from 'material-colors';
@@ -50,6 +51,9 @@ export const STROKE_WIDTH = 2;
 export const STROKE_DASH_ARRAY = [];
 export const DEFAULT_OPACITY = 1;
 
+export const DEFAULT_FONT_FAMILY = 'Arial';
+export const DEFAULT_FONT_SIZE = 40;
+
 export const CIRCLE_OPTIONS = {
   radius: 75,
   width: DEFAULT_SHAPE_WIDTH,
@@ -72,3 +76,11 @@ export const DIAMOND_OPTIONS = {
   width: 200,
   height: 200,
 } as const satisfies IRectOptions;
+
+export const TEXTBOX_OPTIONS = {
+  type: 'text',
+  left: 100,
+  top: 100,
+  fontSize: DEFAULT_FONT_SIZE,
+  fontFamily: DEFAULT_FONT_FAMILY,
+} as const satisfies ITextboxOptions;

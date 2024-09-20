@@ -10,6 +10,7 @@ import {
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
+  TEXTBOX_OPTIONS,
   TRIANGLE_OPTIONS,
   WORKSPACE_NAME,
 } from '@/features/editor/constants';
@@ -127,6 +128,15 @@ export const buildEditor: BuildEditor = ({
         object.set({ opacity });
       });
       canvas.renderAll();
+    },
+
+    addText: (value, options) => {
+      const object = new fabric.Textbox(value, {
+        fill: fillColor || FILL_COLOR,
+        ...TEXTBOX_OPTIONS,
+        ...options,
+      });
+      addToCanvas(object);
     },
 
     addCircle: () => {
