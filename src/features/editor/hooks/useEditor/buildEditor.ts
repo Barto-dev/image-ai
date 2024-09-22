@@ -367,6 +367,11 @@ export const buildEditor: BuildEditor = ({
       );
       addToCanvas(object);
     },
+    deleteActiveObject: () => {
+      canvas.getActiveObjects().forEach((object) => canvas.remove(object));
+      canvas.discardActiveObject();
+      canvas.renderAll();
+    },
     canvas,
     getActiveFillColor,
     getActiveStrokeColor,

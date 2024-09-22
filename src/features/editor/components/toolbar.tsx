@@ -7,6 +7,7 @@ import {
   ArrowDown,
   ArrowUp,
   ChevronDown,
+  TrashIcon,
 } from 'lucide-react';
 import { RxTransparencyGrid } from 'react-icons/rx';
 import { isFabricTextType } from '@/features/editor/utils';
@@ -21,6 +22,7 @@ interface ToolbarProps {
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
+// TODO:handle lost focus on input when rerendering
 export const Toolbar = ({
   editor,
   activeTool,
@@ -217,6 +219,13 @@ export const Toolbar = ({
         onClick={() => onChangeActiveTool('opacity')}
       >
         <RxTransparencyGrid className="size-4" />
+      </ToolbarButton>
+
+      <ToolbarButton
+        label="Delete"
+        onClick={() => editor?.deleteActiveObject()}
+      >
+        <TrashIcon className="size-4" />
       </ToolbarButton>
     </div>
   );

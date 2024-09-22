@@ -73,6 +73,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   addInverseTriangle: () => void;
   addDiamond: () => void;
   addText: (value: string, options?: ITextboxOptions) => void;
+  deleteActiveObject: () => void;
   getActiveFillColor: () => string;
   getActiveStrokeColor: () => string;
   getActiveStrokeWidth: () => number;
