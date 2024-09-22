@@ -46,6 +46,8 @@ type BuildEditorProps = {
   setFontUnderline: (underline: boolean) => void;
   textAlign: TextAlign;
   setTextAlign: (textAlign: TextAlign) => void;
+  fontSize: number;
+  setFontSize: (fontSize: number) => void;
   selectedObjects: fabric.Object[];
 };
 
@@ -63,6 +65,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   changeFontLinethrough: (linethrough: boolean) => void;
   changeFontUnderline: (underline: boolean) => void;
   changeTextAlign: (textAlign: TextAlign) => void;
+  changeFontSize: (fontSize: number) => void;
   addCircle: () => void;
   addSofRectangle: () => void;
   addRectangle: () => void;
@@ -81,6 +84,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   getActiveFontLinethrough: () => boolean;
   getActiveFontUnderline: () => boolean;
   getActiveTextAlign: () => TextAlign;
+  getActiveFontSize: () => number;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
 };

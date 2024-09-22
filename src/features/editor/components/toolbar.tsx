@@ -1,7 +1,4 @@
 import { ActiveTool, BuildEditor } from '../types';
-import { Hint } from '@/components/hint';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { BsBorderWidth } from 'react-icons/bs';
 import {
   AlignCenter,
@@ -14,6 +11,9 @@ import {
 import { RxTransparencyGrid } from 'react-icons/rx';
 import { isFabricTextType } from '@/features/editor/utils';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
+import { ToolbarButton } from './toolbar-button';
+import { FontSizeInput } from './font-size-input';
+import { DEFAULT_FONT_SIZE } from '@/features/editor/constants';
 
 interface ToolbarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -28,6 +28,7 @@ export const Toolbar = ({
 }: ToolbarProps) => {
   const fillColor = editor?.getActiveFillColor();
   const font = editor?.getActiveFontFamily();
+  const fontSize = editor?.getActiveFontSize() || DEFAULT_FONT_SIZE;
   const fontWeight = editor?.getActiveFontWeight();
   const fontStyle = editor?.getActiveFontStyle();
   const fontLinethrough = editor?.getActiveFontLinethrough();
@@ -66,261 +67,157 @@ export const Toolbar = ({
   }
 
   return (
-    <div className="shrink-0 h-editor-toolbar border-b bg-white w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2">
-      <div className="center h-full">
-        <Hint
-          label="Color"
-          side="bottom"
-          sideOffset={5}
-        >
-          <Button
-            className={cn(activeTool === 'fill' && 'bg-gray-100')}
-            size="icon"
-            variant="ghost"
-            onClick={() => onChangeActiveTool('fill')}
+    <div className="shrink-0 h-editor-toolbar border-b bg-white w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2.5">
+      <ToolbarButton
+        label="Color"
+        active={activeTool === 'fill'}
+        onClick={() => onChangeActiveTool('fill')}
+      >
+        <span
+          className="rounded-sm size-4 border"
+          style={{
+            backgroundColor: fillColor,
+          }}
+        />
+      </ToolbarButton>
+
+      {!isSelectedText && (
+        <>
+          <ToolbarButton
+            label="Border color"
+            active={activeTool === 'stroke-color'}
+            onClick={() => onChangeActiveTool('stroke-color')}
           >
             <span
-              className="rounded-sm size-4 border"
+              className="rounded-sm size-4 border-2 bg-white"
               style={{
-                backgroundColor: fillColor,
+                borderColor: strokeColor,
               }}
             />
-          </Button>
-        </Hint>
-      </div>
-      {!isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Border color"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              className={cn(activeTool === 'stroke-color' && 'bg-gray-100')}
-              size="icon"
-              variant="ghost"
-              onClick={() => onChangeActiveTool('stroke-color')}
-            >
-              <span
-                className="rounded-sm size-4 border-2 bg-white"
-                style={{
-                  borderColor: strokeColor,
-                }}
-              />
-            </Button>
-          </Hint>
-        </div>
-      )}
+          </ToolbarButton>
 
-      {!isSelectedText && (
-        <div className="center h-full">
-          <Hint
+          <ToolbarButton
             label="Border width"
-            side="bottom"
-            sideOffset={5}
+            active={activeTool === 'stroke-width'}
+            onClick={() => onChangeActiveTool('stroke-width')}
           >
-            <Button
-              className={cn(activeTool === 'stroke-width' && 'bg-gray-100')}
-              size="icon"
-              variant="ghost"
-              onClick={() => onChangeActiveTool('stroke-width')}
-            >
-              <BsBorderWidth className="size-4" />
-            </Button>
-          </Hint>
-        </div>
+            <BsBorderWidth className="size-4" />
+          </ToolbarButton>
+        </>
       )}
 
       {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Font"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              className={cn(activeTool === 'font' && 'bg-gray-100')}
-              variant="ghost"
-              onClick={() => onChangeActiveTool('font')}
-            >
-              <span className="max-w-24 truncate">{font}</span>
-              <ChevronDown className="size-4 ml-2 shrink-0" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Bold"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              size="icon"
-              variant={Number(fontWeight) > 400 ? 'secondary' : 'ghost'}
-              onClick={changeFontWeight}
-            >
-              <FaBold className="size-4" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Bold"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              size="icon"
-              variant={fontStyle === 'italic' ? 'secondary' : 'ghost'}
-              onClick={changeFontStyle}
-            >
-              <FaItalic className="size-4" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Linethrough"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              size="icon"
-              variant={fontLinethrough ? 'secondary' : 'ghost'}
-              onClick={changeFontLinethrough}
-            >
-              <FaStrikethrough className="size-4" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Underline"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              size="icon"
-              variant={fontUnderline ? 'secondary' : 'ghost'}
-              onClick={changeFontUnderline}
-            >
-              <FaUnderline className="size-4" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Align left"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              size="icon"
-              variant={textAlign === 'left' ? 'secondary' : 'ghost'}
-              onClick={() => editor?.changeTextAlign('left')}
-            >
-              <AlignLeft className="size-4" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Align center"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              size="icon"
-              variant={textAlign === 'center' ? 'secondary' : 'ghost'}
-              onClick={() => editor?.changeTextAlign('center')}
-            >
-              <AlignCenter className="size-4" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      {isSelectedText && (
-        <div className="center h-full">
-          <Hint
-            label="Align right"
-            side="bottom"
-            sideOffset={5}
-          >
-            <Button
-              size="icon"
-              variant={textAlign === 'right' ? 'secondary' : 'ghost'}
-              onClick={() => editor?.changeTextAlign('right')}
-            >
-              <AlignRight className="size-4" />
-            </Button>
-          </Hint>
-        </div>
-      )}
-
-      <div className="center h-full">
-        <Hint
-          label="Bring forward"
-          side="bottom"
-          sideOffset={5}
+        <ToolbarButton
+          size="default"
+          label="Font"
+          active={activeTool === 'font'}
+          onClick={() => onChangeActiveTool('font')}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => editor?.bringForward()}
-          >
-            <ArrowUp className="size-4" />
-          </Button>
-        </Hint>
-      </div>
-      <div className="center h-full">
-        <Hint
-          label="Send backwards"
-          side="bottom"
-          sideOffset={5}
-        >
-          <Button
-            size="icon"
-            variant="ghost"
-            onClick={() => editor?.sendBackwards()}
-          >
-            <ArrowDown className="size-4" />
-          </Button>
-        </Hint>
+          <span className="max-w-24 truncate">{font}</span>
+          <ChevronDown className="size-4 ml-2 shrink-0" />
+        </ToolbarButton>
+      )}
 
-        <Hint
-          label="Opacity"
-          side="bottom"
-          sideOffset={5}
+      {isSelectedText && (
+        <ToolbarButton
+          label="Bold"
+          active={Number(fontWeight) > 400}
+          onClick={changeFontWeight}
         >
-          <Button
-            size="icon"
-            variant="ghost"
-            className={cn(activeTool === 'opacity' && 'bg-gray-100')}
-            onClick={() => onChangeActiveTool('opacity')}
-          >
-            <RxTransparencyGrid className="size-4" />
-          </Button>
-        </Hint>
-      </div>
+          <FaBold className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedText && (
+        <ToolbarButton
+          label="Italic"
+          active={fontStyle === 'italic'}
+          onClick={changeFontStyle}
+        >
+          <FaItalic className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedText && (
+        <ToolbarButton
+          label="Linethrough"
+          active={!!fontLinethrough}
+          onClick={changeFontLinethrough}
+        >
+          <FaStrikethrough className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedText && (
+        <ToolbarButton
+          label="Underline"
+          active={!!fontUnderline}
+          onClick={changeFontUnderline}
+        >
+          <FaUnderline className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedText && (
+        <ToolbarButton
+          label="Align left"
+          active={textAlign === 'left'}
+          onClick={() => editor?.changeTextAlign('left')}
+        >
+          <AlignLeft className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedText && (
+        <ToolbarButton
+          label="Align center"
+          active={textAlign === 'center'}
+          onClick={() => editor?.changeTextAlign('center')}
+        >
+          <AlignCenter className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedText && (
+        <ToolbarButton
+          label="Align right"
+          active={textAlign === 'right'}
+          onClick={() => editor?.changeTextAlign('right')}
+        >
+          <AlignRight className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedText && (
+        <div className="center h-full">
+          <FontSizeInput
+            onChange={(value) => editor?.changeFontSize(value)}
+            value={fontSize}
+          />
+        </div>
+      )}
+
+      <ToolbarButton
+        label="Bring forward"
+        onClick={() => editor?.bringForward()}
+      >
+        <ArrowUp className="size-4" />
+      </ToolbarButton>
+
+      <ToolbarButton
+        label="Send backwards"
+        onClick={() => editor?.sendBackwards()}
+      >
+        <ArrowDown className="size-4" />
+      </ToolbarButton>
+
+      <ToolbarButton
+        label="Opacity"
+        active={activeTool === 'opacity'}
+        onClick={() => onChangeActiveTool('opacity')}
+      >
+        <RxTransparencyGrid className="size-4" />
+      </ToolbarButton>
     </div>
   );
 };

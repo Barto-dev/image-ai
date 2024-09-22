@@ -6,6 +6,7 @@ import { FontStyle, TextAlign, UseEditorProps } from '../../types';
 import {
   DEFAULT_FONT_FAMILY,
   DEFAULT_FONT_LINETHROUGH,
+  DEFAULT_FONT_SIZE,
   DEFAULT_FONT_STYLE,
   DEFAULT_FONT_UNDERLINE,
   DEFAULT_FONT_WEIGHT,
@@ -37,6 +38,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     useState<number[]>(STROKE_DASH_ARRAY);
   const [opacity, setOpacity] = useState(DEFAULT_OPACITY);
   const [fontFamily, setFontFamily] = useState(DEFAULT_FONT_FAMILY);
+  const [fontSize, setFontSize] = useState(DEFAULT_FONT_SIZE);
   const [fontWeight, setFontWeight] = useState(DEFAULT_FONT_WEIGHT);
   const [fontStyle, setFontStyle] = useState<FontStyle>(DEFAULT_FONT_STYLE);
   const [fontLinethrough, setFontLinethrough] = useState(
@@ -74,6 +76,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         setFontUnderline,
         textAlign,
         setTextAlign,
+        fontSize,
+        setFontSize,
         selectedObjects,
       });
     }
@@ -92,6 +96,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     fontUnderline,
     fontLinethrough,
     textAlign,
+    fontSize,
   ]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: InitArgs) => {

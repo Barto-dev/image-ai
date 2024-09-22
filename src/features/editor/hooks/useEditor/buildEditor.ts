@@ -51,6 +51,8 @@ export const buildEditor: BuildEditor = ({
   setFontUnderline,
   textAlign,
   setTextAlign,
+  fontSize,
+  setFontSize,
   selectedObjects,
 }) => {
   const getWorkspace = () => {
@@ -78,6 +80,14 @@ export const buildEditor: BuildEditor = ({
   // for new objects, opacity is always 1 instead of previous object's opacity
   const getActiveOpacity = () =>
     getActiveProperty('opacity', DEFAULT_OPACITY, selectedObjects);
+
+  const getActiveFontSize = () => {
+    const selectedObject = selectedObjects[0];
+    if (isTextboxObject(selectedObject)) {
+      return selectedObject.get('fontSize') || fontSize;
+    }
+    return fontSize;
+  };
 
   const getActiveTextAlign = () => {
     const selectedObject = selectedObjects[0];
@@ -144,6 +154,16 @@ export const buildEditor: BuildEditor = ({
       // to prevent shapes from being moved behind the workspace
       const workspace = getWorkspace();
       workspace?.sendToBack();
+    },
+
+    changeFontSize: (fontSize) => {
+      setFontSize(fontSize);
+      canvas.getActiveObjects().forEach((object) => {
+        if (isTextboxObject(object)) {
+          object.set({ fontSize });
+        }
+      });
+      canvas.renderAll();
     },
 
     changeTextAlign: (textAlign) => {
@@ -359,6 +379,7 @@ export const buildEditor: BuildEditor = ({
     getActiveFontLinethrough,
     getActiveFontUnderline,
     getActiveTextAlign,
+    getActiveFontSize,
     selectedObjects,
   };
 };
