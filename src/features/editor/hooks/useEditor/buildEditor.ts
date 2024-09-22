@@ -271,6 +271,21 @@ export const buildEditor: BuildEditor = ({
       canvas.renderAll();
     },
 
+    addImage: (url: string) => {
+      fabric.Image.fromURL(
+        url,
+        (image) => {
+          const workspace = getWorkspace();
+          image.scaleToWidth(workspace?.width || 0);
+          image.scaleToHeight(workspace?.height || 0);
+          addToCanvas(image);
+        },
+        {
+          crossOrigin: 'anonymous',
+        },
+      );
+    },
+
     addText: (value, options) => {
       const object = new fabric.Textbox(value, {
         fill: fillColor || FILL_COLOR,
