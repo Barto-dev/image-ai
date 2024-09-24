@@ -7,6 +7,7 @@ import { useGetImages } from '@/features/images/api/useGetImages';
 import { AlertTriangle, Loader } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { UploadButton } from '@/lib/uploadthing';
 
 interface ImageSidebarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -35,6 +36,22 @@ export const ImageSidebar = ({
         title="Images"
         description="Choose an image for your design"
       />
+      <div className="p-4 border-b">
+        <UploadButton
+          appearance={{
+            button:
+              'w-full text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90',
+            allowedContent: 'hidden',
+          }}
+          content={{
+            button: 'Upload Image',
+          }}
+          onClientUploadComplete={(res) => {
+            editor?.addImage(res[0].url);
+          }}
+          endpoint="imageUploader"
+        />
+      </div>
       {isLoading && (
         <div className="center flex-1">
           <Loader className="size-4 text-muted-foreground animate-spin" />
