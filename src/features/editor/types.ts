@@ -5,6 +5,31 @@ export type FontStyle = ITextboxOptions['fontStyle'];
 
 export type TextAlign = 'left' | 'center' | 'right';
 
+export type FilterType =
+  | 'polaroid'
+  | 'sepia'
+  | 'kodachrome'
+  | 'contrast'
+  | 'brightness'
+  | 'brownie'
+  | 'vintage'
+  | 'technicolor'
+  | 'pixelate'
+  | 'invert'
+  | 'blur'
+  | 'sharpen'
+  | 'emboss'
+  | 'removecolor'
+  | 'blacknwhite'
+  | 'vibrance'
+  | 'blendcolor'
+  | 'huerotate'
+  | 'grayscale'
+  | 'saturation'
+  | 'resize'
+  | 'default'
+  | 'gamma';
+
 export type ActiveTool =
   | 'select'
   | 'shapes'
@@ -66,6 +91,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   changeFontUnderline: (underline: boolean) => void;
   changeTextAlign: (textAlign: TextAlign) => void;
   changeFontSize: (fontSize: number) => void;
+  changeImageFilter: (filter: FilterType) => void;
   addCircle: () => void;
   addSofRectangle: () => void;
   addRectangle: () => void;

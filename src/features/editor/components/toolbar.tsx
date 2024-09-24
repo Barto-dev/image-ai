@@ -10,11 +10,12 @@ import {
   TrashIcon,
 } from 'lucide-react';
 import { RxTransparencyGrid } from 'react-icons/rx';
-import { isFabricTextType } from '@/features/editor/utils';
+import { isFabricTypeImage, isFabricTypeText } from '@/features/editor/utils';
 import { FaBold, FaItalic, FaStrikethrough, FaUnderline } from 'react-icons/fa';
 import { ToolbarButton } from './toolbar-button';
 import { FontSizeInput } from './font-size-input';
 import { DEFAULT_FONT_SIZE } from '@/features/editor/constants';
+import { TbColorFilter } from 'react-icons/tb';
 
 interface ToolbarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -38,7 +39,8 @@ export const Toolbar = ({
   const textAlign = editor?.getActiveTextAlign();
   const strokeColor = editor?.getActiveStrokeColor();
   const selectedObjects = editor?.selectedObjects;
-  const isSelectedText = isFabricTextType(selectedObjects?.[0]?.type);
+  const isSelectedText = isFabricTypeText(selectedObjects?.[0]?.type);
+  const isSelectedImage = isFabricTypeImage(selectedObjects?.[0]?.type);
 
   const changeFontWeight = () => {
     const activeFontWeight = editor?.getActiveFontWeight();
@@ -70,18 +72,20 @@ export const Toolbar = ({
 
   return (
     <div className="shrink-0 h-editor-toolbar border-b bg-white w-full flex items-center overflow-x-auto z-[49] p-2 gap-x-2.5">
-      <ToolbarButton
-        label="Color"
-        active={activeTool === 'fill'}
-        onClick={() => onChangeActiveTool('fill')}
-      >
-        <span
-          className="rounded-sm size-4 border"
-          style={{
-            backgroundColor: fillColor,
-          }}
-        />
-      </ToolbarButton>
+      {!isSelectedImage && (
+        <ToolbarButton
+          label="Color"
+          active={activeTool === 'fill'}
+          onClick={() => onChangeActiveTool('fill')}
+        >
+          <span
+            className="rounded-sm size-4 border"
+            style={{
+              backgroundColor: fillColor,
+            }}
+          />
+        </ToolbarButton>
+      )}
 
       {!isSelectedText && (
         <>
@@ -197,6 +201,16 @@ export const Toolbar = ({
             value={fontSize}
           />
         </div>
+      )}
+
+      {isSelectedImage && (
+        <ToolbarButton
+          label="Filter"
+          active={activeTool === 'filter'}
+          onClick={() => onChangeActiveTool('filter')}
+        >
+          <TbColorFilter className="size-4" />
+        </ToolbarButton>
       )}
 
       <ToolbarButton

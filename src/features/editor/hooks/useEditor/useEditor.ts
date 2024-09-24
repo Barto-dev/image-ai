@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useAutoResize } from '../useAutoResize';
-import { FontStyle, TextAlign, UseEditorProps } from '../../types';
+import { FilterType, FontStyle, TextAlign, UseEditorProps } from '../../types';
 import {
   DEFAULT_FONT_FAMILY,
   DEFAULT_FONT_LINETHROUGH,

@@ -1,6 +1,12 @@
 import { BuildEditor, TextAlign } from '@/features/editor/types';
 import { fabric } from 'fabric';
-import { isFabricTextType, isTextboxObject } from '@/features/editor/utils';
+import {
+  createFilter,
+  isFabricTypeImage,
+  isFabricTypeText,
+  isImageObject,
+  isTextboxObject,
+} from '@/features/editor/utils';
 import {
   CIRCLE_OPTIONS,
   DEFAULT_FONT_FAMILY,
@@ -156,6 +162,18 @@ export const buildEditor: BuildEditor = ({
       workspace?.sendToBack();
     },
 
+    changeImageFilter: (filter) => {
+      canvas.getActiveObjects().forEach((object) => {
+        if (isFabricTypeImage(object.type)) {
+          const imageObject = object as fabric.Image;
+          const effect = createFilter(filter);
+          imageObject.filters = effect ? [effect] : [];
+          imageObject.applyFilters();
+          canvas.renderAll();
+        }
+      });
+    },
+
     changeFontSize: (fontSize) => {
       setFontSize(fontSize);
       canvas.getActiveObjects().forEach((object) => {
@@ -238,7 +256,7 @@ export const buildEditor: BuildEditor = ({
       setStrokeColor(color);
       canvas.getActiveObjects().forEach((object) => {
         // Text types don't have stroke property
-        if (isFabricTextType(object.type)) {
+        if (isFabricTypeText(object.type)) {
           object.set({ fill: color });
           return;
         }

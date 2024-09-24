@@ -1,8 +1,8 @@
 import {
   ICircleOptions,
   IRectOptions,
-  ITriangleOptions,
   ITextboxOptions,
+  ITriangleOptions,
 } from 'fabric/fabric-impl';
 
 import * as material from 'material-colors';
@@ -109,3 +109,30 @@ export const FONTS = [
   'Trebuchet MS',
   'Verdana',
 ];
+
+// TODO: add labels and mini previews
+export const FILTERS = [
+  'default',
+  'polaroid',
+  'sepia',
+  'kodachrome',
+  'contrast',
+  'brightness',
+  'brownie',
+  'vintage',
+  'technicolor',
+  'pixelate',
+  'invert',
+  'blur',
+  'sharpen',
+  'emboss',
+  'removecolor',
+  'blacknwhite',
+  'vibrance',
+  'blendcolor',
+  'huerotate',
+  'resize',
+  'gamma',
+  'grayscale',
+  'saturation',
+] as const;
