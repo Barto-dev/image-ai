@@ -2,7 +2,7 @@ import { fabric } from 'fabric';
 import { useCallback, useMemo, useState } from 'react';
 
 import { useAutoResize } from '../useAutoResize';
-import { FilterType, FontStyle, TextAlign, UseEditorProps } from '../../types';
+import { FontStyle, TextAlign, UseEditorProps } from '../../types';
 import {
   DEFAULT_FONT_FAMILY,
   DEFAULT_FONT_LINETHROUGH,
@@ -20,6 +20,7 @@ import {
 } from '../../constants';
 import { useCanvasEvents } from '../useCanvasEvents';
 import { buildEditor } from './buildEditor';
+import { useClipboard } from '../useClipboard';
 
 type InitArgs = {
   initialCanvas: fabric.Canvas;
@@ -47,6 +48,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [fontUnderline, setFontUnderline] = useState(DEFAULT_FONT_UNDERLINE);
   const [textAlign, setTextAlign] = useState<TextAlign>(DEFAULT_TEXT_ALIGN);
 
+  const { copy, paste } = useClipboard({ canvas });
   useAutoResize({ canvas, container });
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
@@ -78,6 +80,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         setTextAlign,
         fontSize,
         setFontSize,
+        copy,
+        paste,
         selectedObjects,
       });
     }
@@ -97,6 +101,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     fontLinethrough,
     textAlign,
     fontSize,
+    copy,
+    paste,
   ]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: InitArgs) => {
