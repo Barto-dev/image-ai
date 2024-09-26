@@ -119,6 +119,8 @@ export type BuildEditor = (props: BuildEditorProps) => {
   selectedObjects: fabric.Object[];
   copy: () => void;
   paste: () => void;
+  enableDrawingMode: () => void;
+  disableDrawingMode: () => void;
 };
 
 export type UseEditorProps = {

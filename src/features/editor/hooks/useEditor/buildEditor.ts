@@ -163,6 +163,18 @@ export const buildEditor: BuildEditor = ({
       workspace?.sendToBack();
     },
 
+    enableDrawingMode: () => {
+      canvas.discardActiveObject();
+      canvas.renderAll();
+      canvas.isDrawingMode = true;
+      canvas.freeDrawingBrush.width = strokeWidth;
+      canvas.freeDrawingBrush.color = strokeColor;
+    },
+
+    disableDrawingMode: () => {
+      canvas.isDrawingMode = false;
+    },
+
     changeImageFilter: (filter) => {
       canvas.getActiveObjects().forEach((object) => {
         if (isFabricTypeImage(object.type)) {
@@ -263,6 +275,7 @@ export const buildEditor: BuildEditor = ({
         }
         object.set({ stroke: color });
       });
+      canvas.freeDrawingBrush.color = color;
       canvas.renderAll();
     },
 
@@ -271,6 +284,7 @@ export const buildEditor: BuildEditor = ({
       canvas.getActiveObjects().forEach((object) => {
         object.set({ strokeWidth: width });
       });
+      canvas.freeDrawingBrush.width = width;
       canvas.renderAll();
     },
 
