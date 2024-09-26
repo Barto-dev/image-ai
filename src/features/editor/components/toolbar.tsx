@@ -7,6 +7,7 @@ import {
   ArrowDown,
   ArrowUp,
   ChevronDown,
+  SquareSplitHorizontal,
   TrashIcon,
 } from 'lucide-react';
 import { RxTransparencyGrid } from 'react-icons/rx';
@@ -210,6 +211,16 @@ export const Toolbar = ({
           onClick={() => onChangeActiveTool('filter')}
         >
           <TbColorFilter className="size-4" />
+        </ToolbarButton>
+      )}
+
+      {isSelectedImage && (
+        <ToolbarButton
+          label="Remove background"
+          active={activeTool === 'remove-bg'}
+          onClick={() => onChangeActiveTool('remove-bg')}
+        >
+          <SquareSplitHorizontal className="size-4" />
         </ToolbarButton>
       )}
 

@@ -21,8 +21,15 @@ export const isTextboxObject = (object: fabric.Object | null) => {
   return object instanceof fabric.Textbox;
 };
 
-export const isImageObject = (object: fabric.Object | null) => {
+export const isImageObject = (object?: fabric.Object | null) => {
   return object instanceof fabric.Image;
+};
+
+export const getObjectImageSrc = (object?: fabric.Object | null) => {
+  if (isImageObject(object)) {
+    return object.getSrc();
+  }
+  return '';
 };
 
 export const createFilter = (filter: FilterType) => {
