@@ -14,7 +14,7 @@ export const rgbaObjectToString = (rgba: RGBColor | 'transparent') => {
   if (rgba === 'transparent') {
     return 'rgba(0, 0, 0, 0)';
   }
-  return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a || 1})`;
+  return `rgba(${rgba.r}, ${rgba.g}, ${rgba.b}, ${rgba.a ?? 1})`;
 };
 
 export const isTextboxObject = (object: fabric.Object | null) => {

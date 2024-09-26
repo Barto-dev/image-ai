@@ -22,7 +22,8 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeArgs) => {
       .getObjects()
       .find((object) => object.name === 'clip');
 
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const scale = fabric.util.findScaleToFit(localWorkspace, {
       width,
       height,
@@ -75,4 +76,6 @@ export const useAutoResize = ({ canvas, container }: UseAutoResizeArgs) => {
       }
     };
   }, [canvas, container, autoZoom]);
+
+  return { autoZoom };
 };

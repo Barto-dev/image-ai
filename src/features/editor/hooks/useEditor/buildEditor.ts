@@ -61,6 +61,7 @@ export const buildEditor: BuildEditor = ({
   selectedObjects,
   copy,
   paste,
+  autoZoom,
 }) => {
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
@@ -173,6 +174,24 @@ export const buildEditor: BuildEditor = ({
 
     disableDrawingMode: () => {
       canvas.isDrawingMode = false;
+    },
+
+    changeWorkspaceSize: (size) => {
+      const workspace = getWorkspace();
+      if (workspace) {
+        workspace.set(size);
+        autoZoom();
+        // TODO:save
+      }
+    },
+
+    changeWorkspaceBackground: (color) => {
+      const workspace = getWorkspace();
+      if (workspace) {
+        workspace.set({ fill: color });
+        canvas.renderAll();
+        // TODO:save
+      }
     },
 
     changeImageFilter: (filter) => {
@@ -433,6 +452,7 @@ export const buildEditor: BuildEditor = ({
     getActiveFontUnderline,
     getActiveTextAlign,
     getActiveFontSize,
+    getWorkspace,
     copy,
     paste,
     selectedObjects,

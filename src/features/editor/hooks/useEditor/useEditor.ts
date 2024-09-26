@@ -49,7 +49,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [textAlign, setTextAlign] = useState<TextAlign>(DEFAULT_TEXT_ALIGN);
 
   const { copy, paste } = useClipboard({ canvas });
-  useAutoResize({ canvas, container });
+  const { autoZoom } = useAutoResize({ canvas, container });
   useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
 
   const editor = useMemo(() => {
@@ -83,6 +83,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         copy,
         paste,
         selectedObjects,
+        autoZoom,
       });
     }
     return undefined;
@@ -103,6 +104,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     fontSize,
     copy,
     paste,
+    autoZoom,
   ]);
 
   const init = useCallback(({ initialCanvas, initialContainer }: InitArgs) => {

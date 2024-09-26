@@ -76,6 +76,7 @@ type BuildEditorProps = {
   copy: () => void;
   paste: () => void;
   selectedObjects: fabric.Object[];
+  autoZoom: () => void;
 };
 
 export type BuildEditor = (props: BuildEditorProps) => {
@@ -94,6 +95,8 @@ export type BuildEditor = (props: BuildEditorProps) => {
   changeTextAlign: (textAlign: TextAlign) => void;
   changeFontSize: (fontSize: number) => void;
   changeImageFilter: (filter: FilterType) => void;
+  changeWorkspaceSize: (size: { width: number; height: number }) => void;
+  changeWorkspaceBackground: (color: string) => void;
   addCircle: () => void;
   addSofRectangle: () => void;
   addRectangle: () => void;
@@ -115,6 +118,7 @@ export type BuildEditor = (props: BuildEditorProps) => {
   getActiveFontUnderline: () => boolean;
   getActiveTextAlign: () => TextAlign;
   getActiveFontSize: () => number;
+  getWorkspace: () => fabric.Object | undefined;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
   copy: () => void;
