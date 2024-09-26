@@ -73,6 +73,8 @@ type BuildEditorProps = {
   setTextAlign: (textAlign: TextAlign) => void;
   fontSize: number;
   setFontSize: (fontSize: number) => void;
+  copy: () => void;
+  paste: () => void;
   selectedObjects: fabric.Object[];
 };
 
@@ -115,6 +117,8 @@ export type BuildEditor = (props: BuildEditorProps) => {
   getActiveFontSize: () => number;
   canvas: fabric.Canvas;
   selectedObjects: fabric.Object[];
+  copy: () => void;
+  paste: () => void;
 };
 
 export type UseEditorProps = {

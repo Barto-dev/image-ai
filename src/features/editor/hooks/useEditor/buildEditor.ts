@@ -4,7 +4,6 @@ import {
   createFilter,
   isFabricTypeImage,
   isFabricTypeText,
-  isImageObject,
   isTextboxObject,
 } from '@/features/editor/utils';
 import {
@@ -60,6 +59,8 @@ export const buildEditor: BuildEditor = ({
   fontSize,
   setFontSize,
   selectedObjects,
+  copy,
+  paste,
 }) => {
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
@@ -418,6 +419,8 @@ export const buildEditor: BuildEditor = ({
     getActiveFontUnderline,
     getActiveTextAlign,
     getActiveFontSize,
+    copy,
+    paste,
     selectedObjects,
   };
 };
