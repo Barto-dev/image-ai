@@ -22,7 +22,8 @@ import {
 import { useCanvasEvents } from '../useCanvasEvents';
 import { buildEditor } from './buildEditor';
 import { useClipboard } from '../useClipboard';
-import { useHistory } from '@/features/editor/hooks/useHistory';
+import { useHistory } from '../useHistory';
+import { useEditorHotkeys } from '../useEditorHotkeys';
 
 type InitArgs = {
   initialCanvas: fabric.Canvas;
@@ -132,6 +133,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     paste,
     autoZoom,
   ]);
+
+  useEditorHotkeys({ canvas, saveHistory, copy, paste, editor, redo, undo });
 
   const init = useCallback(
     ({ initialCanvas, initialContainer }: InitArgs) => {
