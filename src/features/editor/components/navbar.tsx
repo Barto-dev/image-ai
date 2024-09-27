@@ -19,15 +19,20 @@ import { CiFileOn } from 'react-icons/ci';
 import { Separator } from '@/components/ui/separator';
 import { Hint } from '@/components/hint';
 import { BsCloudCheck } from 'react-icons/bs';
-import { ActiveTool } from '@/features/editor/types';
+import { ActiveTool, BuildEditor } from '@/features/editor/types';
 import { cn } from '@/lib/utils';
 
 interface NavbarProps {
+  editor: ReturnType<BuildEditor> | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
-export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
+export const Navbar = ({
+  activeTool,
+  onChangeActiveTool,
+  editor,
+}: NavbarProps) => {
   return (
     <nav className="w-full flex items-center p-4 h-editor-navbar gap-x-8 border-b lg:pl-[34px]">
       <Logo />
@@ -83,10 +88,11 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
           sideOffset={10}
         >
           <Button
-            aria-label="Select"
+            disabled={!editor?.canUndo()}
+            aria-label="Undo"
             variant="ghost"
             size="icon"
-            className="" //TODO
+            onClick={() => editor?.undo()}
           >
             <Undo2 className="size-4" />
           </Button>
@@ -98,10 +104,11 @@ export const Navbar = ({ activeTool, onChangeActiveTool }: NavbarProps) => {
           sideOffset={10}
         >
           <Button
-            aria-label="Select"
+            disabled={!editor?.canRedo()}
+            aria-label="Redo"
             variant="ghost"
             size="icon"
-            className="" //TODO
+            onClick={() => editor?.redo()}
           >
             <Redo2 className="size-4" />
           </Button>

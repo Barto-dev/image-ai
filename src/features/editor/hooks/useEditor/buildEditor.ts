@@ -62,6 +62,11 @@ export const buildEditor: BuildEditor = ({
   copy,
   paste,
   autoZoom,
+  saveHistory,
+  canRedo,
+  canUndo,
+  redo,
+  undo,
 }) => {
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
@@ -203,7 +208,7 @@ export const buildEditor: BuildEditor = ({
       if (workspace) {
         workspace.set(size);
         autoZoom();
-        // TODO:save
+        saveHistory();
       }
     },
 
@@ -212,7 +217,7 @@ export const buildEditor: BuildEditor = ({
       if (workspace) {
         workspace.set({ fill: color });
         canvas.renderAll();
-        // TODO:save
+        saveHistory();
       }
     },
 
@@ -475,6 +480,10 @@ export const buildEditor: BuildEditor = ({
     getActiveTextAlign,
     getActiveFontSize,
     getWorkspace,
+    canRedo,
+    canUndo,
+    redo,
+    undo,
     copy,
     paste,
     autoZoom,

@@ -77,6 +77,11 @@ type BuildEditorProps = {
   paste: () => void;
   selectedObjects: fabric.Object[];
   autoZoom: () => void;
+  saveHistory: (skip?: boolean) => void;
+  canRedo: () => boolean;
+  canUndo: () => boolean;
+  redo: () => void;
+  undo: () => void;
 };
 
 export type BuildEditor = (props: BuildEditorProps) => {
@@ -128,6 +133,10 @@ export type BuildEditor = (props: BuildEditorProps) => {
   zoomOut: () => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: () => boolean;
+  canRedo: () => boolean;
 };
 
 export type UseEditorProps = {

@@ -136,3 +136,14 @@ export const FILTERS = [
   'grayscale',
   'saturation',
 ] as const;
+
+export const HISTORY_JSON_KEYS = [
+  'name',
+  'gradientAngle',
+  'selectable',
+  'hasControls',
+  'linkData',
+  'editable',
+  'extension',
+  'extensionType',
+];

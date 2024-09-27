@@ -13,6 +13,7 @@ import {
   DEFAULT_OPACITY,
   DEFAULT_TEXT_ALIGN,
   FILL_COLOR,
+  HISTORY_JSON_KEYS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
   STROKE_WIDTH,
@@ -21,6 +22,7 @@ import {
 import { useCanvasEvents } from '../useCanvasEvents';
 import { buildEditor } from './buildEditor';
 import { useClipboard } from '../useClipboard';
+import { useHistory } from '@/features/editor/hooks/useHistory';
 
 type InitArgs = {
   initialCanvas: fabric.Canvas;
@@ -48,9 +50,23 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   const [fontUnderline, setFontUnderline] = useState(DEFAULT_FONT_UNDERLINE);
   const [textAlign, setTextAlign] = useState<TextAlign>(DEFAULT_TEXT_ALIGN);
 
+  const {
+    saveHistory,
+    canRedo,
+    canUndo,
+    redo,
+    undo,
+    setHistoryIndex,
+    canvasHistory,
+  } = useHistory({ canvas });
   const { copy, paste } = useClipboard({ canvas });
   const { autoZoom } = useAutoResize({ canvas, container });
-  useCanvasEvents({ canvas, setSelectedObjects, clearSelectionCallback });
+  useCanvasEvents({
+    canvas,
+    setSelectedObjects,
+    clearSelectionCallback,
+    saveHistory,
+  });
 
   const editor = useMemo(() => {
     if (canvas) {
@@ -84,10 +100,20 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
         paste,
         selectedObjects,
         autoZoom,
+        saveHistory,
+        canRedo,
+        canUndo,
+        redo,
+        undo,
       });
     }
     return undefined;
   }, [
+    saveHistory,
+    canRedo,
+    canUndo,
+    redo,
+    undo,
     canvas,
     fillColor,
     strokeColor,
@@ -107,37 +133,46 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     autoZoom,
   ]);
 
-  const init = useCallback(({ initialCanvas, initialContainer }: InitArgs) => {
-    fabric.Object.prototype.set({
-      cornerColor: 'white',
-      cornerStyle: 'circle',
-      borderColor: '#3b82f6',
-      borderScaleFactor: 1.5,
-      transparentCorners: false,
-      borderOpacityWhenMoving: 1,
-      cornerStrokeColor: '#3b82f6',
-    });
+  const init = useCallback(
+    ({ initialCanvas, initialContainer }: InitArgs) => {
+      fabric.Object.prototype.set({
+        cornerColor: 'white',
+        cornerStyle: 'circle',
+        borderColor: '#3b82f6',
+        borderScaleFactor: 1.5,
+        transparentCorners: false,
+        borderOpacityWhenMoving: 1,
+        cornerStrokeColor: '#3b82f6',
+      });
 
-    const initialWorkspace = new fabric.Rect({
-      width: 900,
-      height: 1200,
-      name: WORKSPACE_NAME,
-      fill: 'white',
-      selectable: false,
-      hasControls: false,
-      shadow: new fabric.Shadow({
-        color: 'rgba(0,0,0,0.8)',
-        blur: 5,
-      }),
-    });
-    initialCanvas.setWidth(initialContainer.offsetWidth);
-    initialCanvas.setHeight(initialContainer.offsetHeight);
-    initialCanvas.add(initialWorkspace);
-    initialCanvas.centerObject(initialWorkspace);
-    initialCanvas.clipPath = initialWorkspace;
-    setCanvas(initialCanvas);
-    setContainer(initialContainer);
-  }, []);
+      const initialWorkspace = new fabric.Rect({
+        width: 900,
+        height: 1200,
+        name: WORKSPACE_NAME,
+        fill: 'white',
+        selectable: false,
+        hasControls: false,
+        shadow: new fabric.Shadow({
+          color: 'rgba(0,0,0,0.8)',
+          blur: 5,
+        }),
+      });
+      initialCanvas.setWidth(initialContainer.offsetWidth);
+      initialCanvas.setHeight(initialContainer.offsetHeight);
+      initialCanvas.add(initialWorkspace);
+      initialCanvas.centerObject(initialWorkspace);
+      initialCanvas.clipPath = initialWorkspace;
+      setCanvas(initialCanvas);
+      setContainer(initialContainer);
+      const currentState = JSON.stringify(
+        initialCanvas.toJSON(HISTORY_JSON_KEYS),
+      );
+      canvasHistory.current = [currentState];
+      setHistoryIndex(0);
+    },
+    // canvasHistory(ref) and setHistoryIndex are not changing
+    [canvasHistory, setHistoryIndex],
+  );
   return {
     init,
     editor,

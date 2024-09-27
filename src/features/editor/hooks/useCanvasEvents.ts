@@ -5,15 +5,29 @@ interface UseCanvasEventsProps {
   canvas: fabric.Canvas | null;
   setSelectedObjects: (objects: fabric.Object[]) => void;
   clearSelectionCallback?: () => void;
+  saveHistory: () => void;
 }
 
 export const useCanvasEvents = ({
   canvas,
   setSelectedObjects,
   clearSelectionCallback,
+  saveHistory,
 }: UseCanvasEventsProps) => {
   useEffect(() => {
     if (!canvas) return;
+
+    canvas.on('object:added', () => {
+      saveHistory();
+    });
+
+    canvas.on('object:modified', () => {
+      saveHistory();
+    });
+
+    canvas.on('object:removed', () => {
+      saveHistory();
+    });
 
     canvas.on('selection:created', (e) => {
       setSelectedObjects(e.selected || []);
@@ -29,9 +43,12 @@ export const useCanvasEvents = ({
     });
 
     return () => {
+      canvas.off('object:added');
+      canvas.off('object:modified');
+      canvas.off('object:removed');
       canvas.off('selection:created');
       canvas.off('selection:updated');
       canvas.off('selection:cleared');
     };
-  }, [canvas, clearSelectionCallback]);
+  }, [canvas, clearSelectionCallback, setSelectedObjects, saveHistory]);
 };
