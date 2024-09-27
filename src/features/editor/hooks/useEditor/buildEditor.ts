@@ -164,6 +164,28 @@ export const buildEditor: BuildEditor = ({
       workspace?.sendToBack();
     },
 
+    zoomIn: () => {
+      let zoomRatio = canvas.getZoom();
+      zoomRatio += 0.2;
+      const center = canvas.getCenter();
+      const newZoomRatio = zoomRatio > 4 ? 4 : zoomRatio;
+      canvas.zoomToPoint(
+        new fabric.Point(center.left, center.top),
+        newZoomRatio,
+      );
+    },
+
+    zoomOut: () => {
+      let zoomRatio = canvas.getZoom();
+      zoomRatio -= 0.1;
+      const center = canvas.getCenter();
+      const newZoomRatio = zoomRatio < 0.2 ? 0.2 : zoomRatio;
+      canvas.zoomToPoint(
+        new fabric.Point(center.left, center.top),
+        newZoomRatio,
+      );
+    },
+
     enableDrawingMode: () => {
       canvas.discardActiveObject();
       canvas.renderAll();
@@ -455,6 +477,7 @@ export const buildEditor: BuildEditor = ({
     getWorkspace,
     copy,
     paste,
+    autoZoom,
     selectedObjects,
   };
 };

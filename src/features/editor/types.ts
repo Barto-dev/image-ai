@@ -123,6 +123,9 @@ export type BuildEditor = (props: BuildEditorProps) => {
   selectedObjects: fabric.Object[];
   copy: () => void;
   paste: () => void;
+  autoZoom: () => void;
+  zoomIn: () => void;
+  zoomOut: () => void;
   enableDrawingMode: () => void;
   disableDrawingMode: () => void;
 };
