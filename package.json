@@ -30,6 +30,7 @@
     "material-colors": "^1.2.6",
     "nanoid": "^5.0.7",
     "next": "14.2.11",
+    "next-auth": "^5.0.0-beta.22",
     "react": "^18",
     "react-beforeunload": "^2.6.0",
     "react-color": "^2.19.3",
