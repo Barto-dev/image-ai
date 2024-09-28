@@ -24,6 +24,7 @@ import { buildEditor } from './buildEditor';
 import { useClipboard } from '../useClipboard';
 import { useHistory } from '../useHistory';
 import { useEditorHotkeys } from '../useEditorHotkeys';
+import { useBeforeunload } from 'react-beforeunload';
 
 type InitArgs = {
   initialCanvas: fabric.Canvas;
@@ -50,6 +51,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   );
   const [fontUnderline, setFontUnderline] = useState(DEFAULT_FONT_UNDERLINE);
   const [textAlign, setTextAlign] = useState<TextAlign>(DEFAULT_TEXT_ALIGN);
+
+  useBeforeunload(() => 'Are you sure you want to leave?');
 
   const {
     saveHistory,

@@ -137,6 +137,11 @@ export type BuildEditor = (props: BuildEditorProps) => {
   redo: () => void;
   canUndo: () => boolean;
   canRedo: () => boolean;
+  savePng: () => void;
+  saveJpg: () => void;
+  saveSvg: () => void;
+  saveJson: () => void;
+  loadJson: (json: string) => void;
 };
 
 export type UseEditorProps = {

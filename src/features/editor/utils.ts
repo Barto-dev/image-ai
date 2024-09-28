@@ -1,6 +1,28 @@
 import { RGBColor } from 'react-color';
 import { fabric } from 'fabric';
 import { FilterType } from '@/features/editor/types';
+import { nanoid } from 'nanoid';
+import { NonEmptyObject } from 'type-fest';
+
+export const transformText = (textObjects: NonEmptyObject<any>) => {
+  textObjects.forEach((textObject: NonEmptyObject<any>) => {
+    if (textObject.object) {
+      transformText(textObject.object);
+    } else {
+      if (textObject.type === 'text') {
+        textObject.type = 'textbox';
+      }
+    }
+  });
+};
+
+export const downloadFile = (fileUrl: string, type: string) => {
+  const link = document.createElement('a');
+  link.href = fileUrl;
+  link.download = `${nanoid()}.${type}`;
+  link.click();
+  link.remove();
+};
 
 export const isFabricTypeText = (type: string | undefined) => {
   return type === 'text' || type === 'i-text' || type === 'textbox';

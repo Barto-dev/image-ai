@@ -2,9 +2,11 @@ import { BuildEditor, TextAlign } from '@/features/editor/types';
 import { fabric } from 'fabric';
 import {
   createFilter,
+  downloadFile,
   isFabricTypeImage,
   isFabricTypeText,
   isTextboxObject,
+  transformText,
 } from '@/features/editor/utils';
 import {
   CIRCLE_OPTIONS,
@@ -12,6 +14,7 @@ import {
   DEFAULT_OPACITY,
   DIAMOND_OPTIONS,
   FILL_COLOR,
+  HISTORY_JSON_KEYS,
   RECTANGLE_OPTIONS,
   STROKE_COLOR,
   STROKE_DASH_ARRAY,
@@ -68,6 +71,64 @@ export const buildEditor: BuildEditor = ({
   redo,
   undo,
 }) => {
+  const generateSaveOptions = () => {
+    const workspace = getWorkspace();
+    if (!workspace) {
+      return null;
+    }
+    return {
+      name: 'Image',
+      format: 'png',
+      quality: 1,
+      width: workspace.width,
+      height: workspace.height,
+      left: workspace.left,
+      top: workspace.top,
+    };
+  };
+
+  const saveImage = (format: 'svg' | 'png' | 'jpg') => {
+    const options = generateSaveOptions();
+    if (!options) {
+      return;
+    }
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toDataURL(options);
+    downloadFile(dataUrl, format);
+    autoZoom();
+  };
+
+  const savePng = () => saveImage('png');
+
+  const saveJpg = () => saveImage('jpg');
+
+  const saveSvg = () => {
+    const options = generateSaveOptions();
+    if (!options) {
+      return;
+    }
+    canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+    const dataUrl = canvas.toSVG(options);
+    const fileString = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(dataUrl)}`;
+    downloadFile(fileString, 'svg');
+    autoZoom();
+  };
+
+  const saveJson = () => {
+    const dataUrl = canvas.toJSON(HISTORY_JSON_KEYS);
+    transformText(dataUrl.objects);
+    const fileString = `data:text/json;charset=utf-8,${encodeURIComponent(JSON.stringify(dataUrl, null, '\t'))}`;
+    downloadFile(fileString, 'json');
+  };
+
+  const loadJson = (json: string) => {
+    const data = JSON.parse(json);
+    canvas.loadFromJSON(data, () => {
+      canvas.renderAll();
+      autoZoom();
+    });
+  };
+
   const getWorkspace = () => {
     return canvas.getObjects().find((object) => object.name === WORKSPACE_NAME);
   };
@@ -480,6 +541,11 @@ export const buildEditor: BuildEditor = ({
     getActiveTextAlign,
     getActiveFontSize,
     getWorkspace,
+    saveSvg,
+    savePng,
+    saveJpg,
+    saveJson,
+    loadJson,
     canRedo,
     canUndo,
     redo,
