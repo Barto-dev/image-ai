@@ -1,13 +1,7 @@
-import { Button } from '@/components/ui/button';
-import { auth } from '@/auth';
+import { protectRoute } from '@/features/auth/utils';
 
 export default async function Home() {
-  const session = await auth();
-  console.log(session);
+  await protectRoute();
 
-  return (
-    <div>
-      <Button>Hi</Button>
-    </div>
-  );
+  return <div>Home page</div>;
 }
