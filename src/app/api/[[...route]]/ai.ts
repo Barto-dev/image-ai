@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { replicate } from '@/lib/replicate';
+import { verifyAuth } from '@hono/auth-js';
 
 const removeBgValidator = zValidator(
   'json',
@@ -18,7 +19,7 @@ const generateValidator = zValidator(
 );
 
 const app = new Hono()
-  .post('/remove-bg', removeBgValidator, async (c) => {
+  .post('/remove-bg', verifyAuth(), removeBgValidator, async (c) => {
     const { image } = c.req.valid('json');
 
     const input = {
@@ -31,7 +32,7 @@ const app = new Hono()
     );
     return c.json({ data: output as string });
   })
-  .post('/generate', generateValidator, async (c) => {
+  .post('/generate', verifyAuth(), generateValidator, async (c) => {
     const { prompt } = c.req.valid('json');
     const input = {
       prompt,
