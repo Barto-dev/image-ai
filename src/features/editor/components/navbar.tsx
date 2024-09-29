@@ -23,6 +23,7 @@ import { ActiveTool, BuildEditor } from '@/features/editor/types';
 import { cn } from '@/lib/utils';
 import { useFilePicker } from 'use-file-picker';
 import { SelectedFiles } from 'use-file-picker/types';
+import { UserButton } from '@/features/auth/components/user-button';
 
 interface NavbarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -205,7 +206,7 @@ export const Navbar = ({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          {/*TODO: add user button*/}
+          <UserButton />
         </div>
       </div>
     </nav>
