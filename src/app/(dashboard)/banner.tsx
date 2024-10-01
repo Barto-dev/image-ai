@@ -1,7 +1,35 @@
+'use client';
+
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useCreateProject } from '@/features/projects/api/useCreateProject';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 export const Banner = () => {
+  const router = useRouter();
+  const mutation = useCreateProject();
+
+  const onClick = () => {
+    mutation.mutate(
+      {
+        name: 'Untitled project',
+        json: '',
+        width: 900,
+        height: 1200,
+      },
+      {
+        onSuccess: ({ data }) => {
+          toast.success('Project created');
+          router.push(`/editor/${data.id}`);
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      },
+    );
+  };
+
   return (
     <div className="text-white md:aspect-[5/1] min-h-52 flex p-6 gap-x-6 items-center rounded-2xl bg-gradient-to-r from-[#2e62cb] via-[#0073ff] to-[#3faff5]">
       <div className="rounded-full size-28 md:center bg-white/50 mb-4 hidden">
@@ -17,6 +45,8 @@ export const Banner = () => {
         <Button
           variant="secondary"
           className="w-40"
+          onClick={onClick}
+          disabled={mutation.isPending}
         >
           Start creating
           <ArrowRight className="size-4 ml-2" />
