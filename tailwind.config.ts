@@ -16,6 +16,7 @@ const config: Config = {
         90: '22.5rem',
         'editor-navbar': '68px',
         'editor-toolbar': '56px',
+        'dashboard-sidebar': '296px',
       },
       colors: {
         background: 'hsl(var(--background))',
