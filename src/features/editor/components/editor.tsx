@@ -22,8 +22,13 @@ import { AiSidebar } from './ai-sidebar';
 import { RemoveBgSidebar } from './remove-bg-sidebar';
 import { DrawSidebar } from './draw-sidebar';
 import { SettingsSidebar } from './settings-sidebar';
+import { GetProjectResponseType } from '@/features/projects/api/useGetProject';
 
-export const Editor = () => {
+interface EditorProps {
+  initialData: GetProjectResponseType['data'];
+}
+
+export const Editor = ({ initialData }: EditorProps) => {
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
