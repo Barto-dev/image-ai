@@ -18,7 +18,55 @@ const createProjectValidator = zValidator(
 
 const getProjectValidator = zValidator('param', z.object({ id: z.string() }));
 
+const updateProjectParamValidator = zValidator(
+  'param',
+  z.object({ id: z.string() }),
+);
+
+const updateProjectBodyValidator = zValidator(
+  'json',
+  projectsInsertSchema
+    .omit({
+      id: true,
+      userId: true,
+      createdAt: true,
+      updatedAt: true,
+    })
+    .partial(),
+);
+
 const app = new Hono()
+  .patch(
+    '/:id',
+    verifyAuth(),
+    updateProjectParamValidator,
+    updateProjectBodyValidator,
+    async (c) => {
+      const auth = c.get('authUser');
+      const { id } = c.req.valid('param');
+
+      if (!auth.token?.id) {
+        return c.json({ error: 'Unauthorized' }, 401);
+      }
+
+      const values = c.req.valid('json');
+
+      const data = await db
+        .update(projects)
+        .set({
+          ...values,
+          updatedAt: new Date(),
+        })
+        .where(and(eq(projects.id, id), eq(projects.userId, auth.token.id)))
+        .returning();
+
+      if (!data[0]) {
+        return c.json({ error: 'Project not found' }, 404);
+      }
+
+      return c.json({ data: data[0] });
+    },
+  )
   .get('/:id', verifyAuth(), getProjectValidator, async (c) => {
     const auth = c.get('authUser');
     const { id } = c.req.valid('param');

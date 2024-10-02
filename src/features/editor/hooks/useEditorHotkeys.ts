@@ -50,7 +50,8 @@ export const useEditorHotkeys = ({
     paste();
   });
 
-  useHotkeys('mod+s', () => {
+  useHotkeys('mod+s', (keyboardEvent) => {
+    keyboardEvent.preventDefault();
     saveHistory(true);
   });
 

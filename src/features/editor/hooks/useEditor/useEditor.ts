@@ -1,5 +1,5 @@
 import { fabric } from 'fabric';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 
 import { useAutoResize } from '../useAutoResize';
 import { FontStyle, TextAlign, UseEditorProps } from '../../types';
@@ -24,13 +24,24 @@ import { buildEditor } from './buildEditor';
 import { useClipboard } from '../useClipboard';
 import { useHistory } from '../useHistory';
 import { useEditorHotkeys } from '../useEditorHotkeys';
+import { useLoadWorkspaceState } from '@/features/editor/hooks/useLoadWorkspaceState';
 
 type InitArgs = {
   initialCanvas: fabric.Canvas;
   initialContainer: HTMLDivElement;
 };
 
-export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
+export const useEditor = ({
+  defaultState,
+  defaultWidth,
+  defaultHeight,
+  clearSelectionCallback,
+  saveCallback,
+}: UseEditorProps) => {
+  const initialState = useRef(defaultState);
+  const initialWidth = useRef(defaultWidth);
+  const initialHeight = useRef(defaultHeight);
+
   const [canvas, setCanvas] = useState<fabric.Canvas | null>(null);
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
   const [selectedObjects, setSelectedObjects] = useState<fabric.Object[]>([]);
@@ -59,7 +70,7 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
     undo,
     setHistoryIndex,
     canvasHistory,
-  } = useHistory({ canvas });
+  } = useHistory({ canvas, saveCallback });
   const { copy, paste } = useClipboard({ canvas });
   const { autoZoom } = useAutoResize({ canvas, container });
   useCanvasEvents({
@@ -135,6 +146,13 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
   ]);
 
   useEditorHotkeys({ canvas, saveHistory, copy, paste, editor, redo, undo });
+  useLoadWorkspaceState({
+    autoZoom,
+    canvas,
+    canvasHistory,
+    initialState,
+    setHistoryIndex,
+  });
 
   const init = useCallback(
     ({ initialCanvas, initialContainer }: InitArgs) => {
@@ -149,8 +167,8 @@ export const useEditor = ({ clearSelectionCallback }: UseEditorProps) => {
       });
 
       const initialWorkspace = new fabric.Rect({
-        width: 900,
-        height: 1200,
+        width: initialWidth.current || 900,
+        height: initialHeight.current || 1200,
         name: WORKSPACE_NAME,
         fill: 'white',
         selectable: false,

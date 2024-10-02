@@ -1,12 +1,14 @@
 import { useCallback, useRef, useState } from 'react';
 import { fabric } from 'fabric';
-import { HISTORY_JSON_KEYS } from '@/features/editor/constants';
+import { HISTORY_JSON_KEYS, WORKSPACE_NAME } from '@/features/editor/constants';
+import { SaveCallback } from '@/features/editor/types';
 
 interface UseHistoryProps {
   canvas: fabric.Canvas | null;
+  saveCallback?: SaveCallback;
 }
 
-export const useHistory = ({ canvas }: UseHistoryProps) => {
+export const useHistory = ({ canvas, saveCallback }: UseHistoryProps) => {
   const canvasHistory = useRef<string[]>([]);
   const skipSave = useRef(false);
   const [historyIndex, setHistoryIndex] = useState(0);
@@ -31,10 +33,15 @@ export const useHistory = ({ canvas }: UseHistoryProps) => {
         setHistoryIndex(canvasHistory.current.length - 1);
       }
 
-      // TODO:save callback
-      console.log('save in database');
+      const workspace = canvas
+        .getObjects()
+        .find((object) => object.name === WORKSPACE_NAME);
+
+      const height = workspace?.height || 0;
+      const width = workspace?.width || 0;
+      saveCallback?.({ json: jsonString, height, width });
     },
-    [canvas],
+    [canvas, saveCallback],
   );
 
   const undo = useCallback(() => {

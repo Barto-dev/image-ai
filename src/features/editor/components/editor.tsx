@@ -8,7 +8,7 @@ import { Sidebar } from './sidebar';
 import { Toolbar } from './toolbar';
 import { Footer } from './footer';
 import { ShapeSidebar } from './shape-sidebar';
-import { ActiveTool } from '../types';
+import { ActiveTool, SaveCallback } from '../types';
 import { FillColorSidebar } from './fill-color-sidebar';
 import { SELECTION_DEPENDENT_TOOLS } from '@/features/editor/constants';
 import { StrokeColorSidebar } from './stroke-color-sidebar';
@@ -23,15 +23,28 @@ import { RemoveBgSidebar } from './remove-bg-sidebar';
 import { DrawSidebar } from './draw-sidebar';
 import { SettingsSidebar } from './settings-sidebar';
 import { GetProjectResponseType } from '@/features/projects/api/useGetProject';
+import { useUpdateProject } from '@/features/projects/api/useUpdateProject';
+import { useDebouncedCallback } from 'use-debounce';
 
 interface EditorProps {
   initialData: GetProjectResponseType['data'];
 }
 
 export const Editor = ({ initialData }: EditorProps) => {
+  const { mutate } = useUpdateProject(initialData.id);
+
   const [activeTool, setActiveTool] = useState<ActiveTool>('select');
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const saveChanges: SaveCallback = useCallback(
+    (values) => {
+      mutate(values);
+    },
+    [mutate],
+  );
+
+  const debounceSaveChanges = useDebouncedCallback(saveChanges, 500);
 
   const onClearSelection = useCallback(() => {
     if (SELECTION_DEPENDENT_TOOLS.includes(activeTool)) {
@@ -40,7 +53,11 @@ export const Editor = ({ initialData }: EditorProps) => {
   }, [activeTool]);
 
   const { init, editor } = useEditor({
+    defaultState: initialData.json,
+    defaultWidth: initialData.width,
+    defaultHeight: initialData.height,
     clearSelectionCallback: onClearSelection,
+    saveCallback: debounceSaveChanges,
   });
 
   useEffect(() => {
@@ -84,6 +101,7 @@ export const Editor = ({ initialData }: EditorProps) => {
   return (
     <div className="h-full flex flex-col">
       <Navbar
+        initialDataId={initialData.id}
         editor={editor}
         activeTool={activeTool}
         onChangeActiveTool={onChangeActiveTool}

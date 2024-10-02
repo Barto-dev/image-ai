@@ -5,6 +5,12 @@ export type FontStyle = ITextboxOptions['fontStyle'];
 
 export type TextAlign = 'left' | 'center' | 'right';
 
+export type SaveCallback = (values: {
+  json: string;
+  height: number;
+  width: number;
+}) => void;
+
 export type FilterType =
   | 'polaroid'
   | 'sepia'
@@ -145,5 +151,9 @@ export type BuildEditor = (props: BuildEditorProps) => {
 };
 
 export type UseEditorProps = {
+  defaultState?: string;
+  defaultWidth?: number;
+  defaultHeight?: number;
   clearSelectionCallback?: () => void;
+  saveCallback?: SaveCallback;
 };

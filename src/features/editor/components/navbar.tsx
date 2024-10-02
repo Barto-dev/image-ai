@@ -24,18 +24,34 @@ import { cn } from '@/lib/utils';
 import { useFilePicker } from 'use-file-picker';
 import { SelectedFiles } from 'use-file-picker/types';
 import { UserButton } from '@/features/auth/components/user-button';
+import { useMutationState } from '@tanstack/react-query';
+import { SavingStatus } from '@/features/editor/components/saving-status';
 
 interface NavbarProps {
+  initialDataId: string;
   editor: ReturnType<BuildEditor> | undefined;
   activeTool: ActiveTool;
   onChangeActiveTool: (tool: ActiveTool) => void;
 }
 
 export const Navbar = ({
+  initialDataId,
   activeTool,
   onChangeActiveTool,
   editor,
 }: NavbarProps) => {
+  const data = useMutationState({
+    filters: {
+      mutationKey: ['project', { id: initialDataId }],
+      exact: true,
+    },
+    select: (mutation) => mutation.state.status,
+  });
+
+  const currentStatus = data[data.length - 1];
+  const isError = currentStatus === 'error';
+  const isPending = currentStatus === 'pending';
+
   const { openFilePicker } = useFilePicker({
     accept: '.json',
     onFilesSuccessfullySelected: ({ plainFiles }: SelectedFiles<string>) => {
@@ -137,10 +153,10 @@ export const Navbar = ({
           orientation="vertical"
           className="mx-2"
         />
-        <div className="flex items-center gap-x-2">
-          <BsCloudCheck className="size-5 text-muted-foreground" />
-          <p className="text-xs text-muted-foreground">Saved</p>
-        </div>
+        <SavingStatus
+          isError={isError}
+          isPending={isPending}
+        />
         <div className="ml-auto flex items-center gap-x-4">
           <DropdownMenu modal={false}>
             <DropdownMenuTrigger asChild>
