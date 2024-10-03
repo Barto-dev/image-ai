@@ -21,11 +21,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { useDuplicateProject } from '@/features/projects/api/useDuplicateProject';
 
 export const Projects = () => {
   const router = useRouter();
   const { data, status, fetchNextPage, isFetchingNextPage, hasNextPage } =
     useGetAllProjects();
+
+  const duplicateMutation = useDuplicateProject();
 
   if (status === 'pending') {
     return (
@@ -111,8 +114,10 @@ export const Projects = () => {
                       >
                         <DropdownMenuItem
                           className="h-10 cursor-pointer"
-                          disabled={false}
-                          onClick={() => {}}
+                          disabled={duplicateMutation.isPending}
+                          onClick={() =>
+                            duplicateMutation.mutate({ id: project.id })
+                          }
                         >
                           <CopyIcon className="size-4 mr-2" />
                           Make a copy

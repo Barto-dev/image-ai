@@ -43,7 +43,55 @@ const getAllProjectsValidator = zValidator(
   }),
 );
 
+const duplicateProjectValidator = zValidator(
+  'param',
+  z.object({ id: z.string() }),
+);
+
 const app = new Hono()
+  .post(
+    '/:id/duplicate',
+    verifyAuth(),
+    duplicateProjectValidator,
+    async (c) => {
+      const auth = c.get('authUser');
+      const { id } = c.req.valid('param');
+
+      if (!auth.token?.id) {
+        return c.json({ error: 'Unauthorized' }, 401);
+      }
+
+      const data = await db
+        .select()
+        .from(projects)
+        .where(and(eq(projects.id, id), eq(projects.userId, auth.token.id)));
+
+      if (!data[0]) {
+        return c.json({ error: 'Project not found' }, 404);
+      }
+
+      const [project] = data;
+
+      const duplicate = await db
+        .insert(projects)
+        .values({
+          name: `${project.name} (Copy)`,
+          json: project.json,
+          height: project.height,
+          width: project.width,
+          userId: auth.token.id,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        })
+        .returning();
+
+      if (!duplicate[0]) {
+        return c.json({ error: 'Failed to duplicate project' }, 400);
+      }
+
+      return c.json({ data: duplicate[0] });
+    },
+  )
   .get('/', verifyAuth(), getAllProjectsValidator, async (c) => {
     const auth = c.get('authUser');
     const { page, limit } = c.req.valid('query');
