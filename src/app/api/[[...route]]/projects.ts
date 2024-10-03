@@ -49,6 +49,25 @@ const duplicateProjectValidator = zValidator(
 );
 
 const app = new Hono()
+  .delete('/:id', verifyAuth(), getProjectValidator, async (c) => {
+    const auth = c.get('authUser');
+    const { id } = c.req.valid('param');
+
+    if (!auth.token?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const data = await db
+      .delete(projects)
+      .where(and(eq(projects.id, id), eq(projects.userId, auth.token.id)))
+      .returning();
+
+    if (!data[0]) {
+      return c.json({ error: 'Project not found' }, 404);
+    }
+
+    return c.json({ data: data[0] });
+  })
   .post(
     '/:id/duplicate',
     verifyAuth(),

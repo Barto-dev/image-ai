@@ -22,6 +22,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
 import { useDuplicateProject } from '@/features/projects/api/useDuplicateProject';
+import { useDeleteProject } from '@/features/projects/api/useDeleteProject';
+import { useConfirm } from '@/hooks/useConfirm';
 
 export const Projects = () => {
   const router = useRouter();
@@ -29,6 +31,19 @@ export const Projects = () => {
     useGetAllProjects();
 
   const duplicateMutation = useDuplicateProject();
+  const removeMutation = useDeleteProject();
+
+  const [ConfirmDialog, confirm] = useConfirm({
+    title: 'Are you sure?',
+    message: 'You are about to delete this project',
+  });
+
+  const onDelete = async (id: string) => {
+    const ok = await confirm();
+    if (ok) {
+      removeMutation.mutate({ id });
+    }
+  };
 
   if (status === 'pending') {
     return (
@@ -69,6 +84,7 @@ export const Projects = () => {
 
   return (
     <div className="space-y-4">
+      <ConfirmDialog />
       <h3 className="font-semibold text-lg">Recent projects</h3>
       <Table>
         <TableBody>
@@ -124,8 +140,8 @@ export const Projects = () => {
                         </DropdownMenuItem>
                         <DropdownMenuItem
                           className="h-10 cursor-pointer"
-                          disabled={false}
-                          onClick={() => {}}
+                          disabled={removeMutation.isPending}
+                          onClick={() => onDelete(project.id)}
                         >
                           <Trash className="size-4 mr-2" />
                           Delete
