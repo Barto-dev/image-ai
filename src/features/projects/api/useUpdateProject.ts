@@ -30,7 +30,7 @@ export const useUpdateProject = (id: string) => {
       return res.json();
     },
     onSuccess: () => {
-      // Todo: Invalidate the projects query so it refetches
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
       queryClient.invalidateQueries({ queryKey: ['project', { id }] });
     },
   });

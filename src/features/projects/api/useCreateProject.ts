@@ -1,6 +1,6 @@
 import { InferRequestType, InferResponseType } from 'hono';
 import { client } from '@/lib/hono';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 type RequestType = InferRequestType<
   (typeof client.api.projects)['$post']
@@ -11,6 +11,8 @@ type ResponseType = InferResponseType<
 >;
 
 export const useCreateProject = () => {
+  const queryClient = useQueryClient();
+
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async (input) => {
       const res = await client.api.projects.$post({ json: input });
@@ -24,7 +26,7 @@ export const useCreateProject = () => {
       return res.json();
     },
     onSuccess: () => {
-      // Todo: Invalidate the projects query so it refetches
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
     },
   });
   return mutation;

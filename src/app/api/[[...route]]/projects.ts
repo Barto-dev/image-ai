@@ -4,7 +4,7 @@ import { zValidator } from '@hono/zod-validator';
 import { projects, projectsInsertSchema } from '@/db/schema';
 import { db } from '@/db/drizzle';
 import { z } from 'zod';
-import { and, eq } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 
 const createProjectValidator = zValidator(
   'json',
@@ -35,7 +35,36 @@ const updateProjectBodyValidator = zValidator(
     .partial(),
 );
 
+const getAllProjectsValidator = zValidator(
+  'query',
+  z.object({
+    page: z.coerce.number(),
+    limit: z.coerce.number(),
+  }),
+);
+
 const app = new Hono()
+  .get('/', verifyAuth(), getAllProjectsValidator, async (c) => {
+    const auth = c.get('authUser');
+    const { page, limit } = c.req.valid('query');
+
+    if (!auth.token?.id) {
+      return c.json({ error: 'Unauthorized' }, 401);
+    }
+
+    const data = await db
+      .select()
+      .from(projects)
+      .where(eq(projects.userId, auth.token.id))
+      .limit(limit)
+      .offset((page - 1) * limit)
+      .orderBy(desc(projects.createdAt));
+
+    return c.json({
+      data,
+      nextPage: data.length === limit ? page + 1 : null,
+    });
+  })
   .patch(
     '/:id',
     verifyAuth(),
