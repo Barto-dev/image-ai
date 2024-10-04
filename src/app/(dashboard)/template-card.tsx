@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
-import { Crown } from 'lucide-react';
+import { ProLabel } from '@/components/pro-label';
 
 interface TemplateCardProps {
   imageSrc: string;
@@ -42,11 +42,7 @@ export const TemplateCard = ({
           alt={title}
           className="object-cover transition transform group-hover:scale-105"
         />
-        {isPro && (
-          <span className="absolute top-2 right-2 z-10 center bg-black/50 rounded-full size-10">
-            <Crown className="size-5 fill-yellow-500 text-yellow-500" />
-          </span>
-        )}
+        {isPro && <ProLabel className="top-2 right-2" />}
         <span className="opacity-0 group-hover:opacity-100 transition absolute inset-0 bg-black/50 center rounded-xl backdrop-filter backdrop-blur-sm">
           <span className="text-white font-medium">Open in editor</span>
         </span>

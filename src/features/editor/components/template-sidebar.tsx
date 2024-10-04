@@ -10,6 +10,8 @@ import {
   useGetTemplates,
 } from '@/features/projects/api/useGetTemplates';
 import { useConfirm } from '@/hooks/useConfirm';
+import { usePaywall } from '@/features/subscriptions/hooks/usePaywall';
+import { ProLabel } from '@/components/pro-label';
 
 interface TemplateSidebarProps {
   editor: ReturnType<BuildEditor> | undefined;
@@ -22,6 +24,7 @@ export const TemplateSidebar = ({
   activeTool,
   onChangeActiveTool,
 }: TemplateSidebarProps) => {
+  const { shouldBlock, triggerPaywall } = usePaywall();
   const [ConfirmDialog, confirm] = useConfirm({
     title: 'Are you sure?',
     message: 'This will clear your current design',
@@ -38,6 +41,10 @@ export const TemplateSidebar = ({
   const onTemplateClick = async (
     template: GetTemplatesResponseType['data'][number],
   ) => {
+    if (template.isPro && shouldBlock) {
+      triggerPaywall();
+      return;
+    }
     const ok = await confirm();
     if (ok) {
       editor?.loadJson(template.json);
@@ -88,6 +95,9 @@ export const TemplateSidebar = ({
                     alt={template.name || 'Template'}
                     className="object-cover"
                   />
+                  {template.isPro && (
+                    <ProLabel className="top-2 right-2 size-8" />
+                  )}
                 </button>
                 <div className="opacity-0 group-hover:opacity-100 transition absolute bottom-0 left-0 text-xs w-full truncate p-1 bg-black/50 text-left text-white">
                   {template.name}
