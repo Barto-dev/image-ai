@@ -4,7 +4,7 @@ import { zValidator } from '@hono/zod-validator';
 import { projects, projectsInsertSchema } from '@/db/schema';
 import { db } from '@/db/drizzle';
 import { z } from 'zod';
-import { and, asc, desc, eq } from 'drizzle-orm';
+import { and, asc, desc, eq, ne } from 'drizzle-orm';
 
 const createProjectValidator = zValidator(
   'json',
@@ -135,7 +135,9 @@ const app = new Hono()
     const data = await db
       .select()
       .from(projects)
-      .where(eq(projects.userId, auth.token.id))
+      .where(
+        and(eq(projects.userId, auth.token.id), ne(projects.isTemplate, true)),
+      )
       .limit(limit)
       .offset((page - 1) * limit)
       .orderBy(desc(projects.createdAt));

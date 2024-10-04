@@ -25,6 +25,7 @@ import { SettingsSidebar } from './settings-sidebar';
 import { GetProjectResponseType } from '@/features/projects/api/useGetProject';
 import { useUpdateProject } from '@/features/projects/api/useUpdateProject';
 import { useDebouncedCallback } from 'use-debounce';
+import { TemplateSidebar } from '@/features/editor/components/template-sidebar';
 
 interface EditorProps {
   initialData: GetProjectResponseType['data'];
@@ -172,6 +173,11 @@ export const Editor = ({ initialData }: EditorProps) => {
           onChangeActiveTool={onChangeActiveTool}
         />
         <SettingsSidebar
+          editor={editor}
+          activeTool={activeTool}
+          onChangeActiveTool={onChangeActiveTool}
+        />
+        <TemplateSidebar
           editor={editor}
           activeTool={activeTool}
           onChangeActiveTool={onChangeActiveTool}
