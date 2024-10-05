@@ -18,7 +18,6 @@ import {
 import { CiFileOn } from 'react-icons/ci';
 import { Separator } from '@/components/ui/separator';
 import { Hint } from '@/components/hint';
-import { BsCloudCheck } from 'react-icons/bs';
 import { ActiveTool, BuildEditor } from '@/features/editor/types';
 import { cn } from '@/lib/utils';
 import { useFilePicker } from 'use-file-picker';
