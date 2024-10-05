@@ -47,7 +47,7 @@ export const Templates = () => {
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Start from a template</h3>
         <div className="center h-32">
-          <Loader className="size-6 text-muted-foreground" />
+          <Loader className="size-6 animate-spin text-muted-foreground" />
         </div>
       </div>
     );

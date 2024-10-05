@@ -6,6 +6,7 @@ interface SidebarItemProps {
   icon: LucideIcon;
   label: string;
   href?: string;
+  disabled?: boolean;
   isActive?: boolean;
   onClick?: () => void;
 }
@@ -16,6 +17,7 @@ export const SidebarItem = ({
   href,
   isActive,
   onClick,
+  disabled,
 }: SidebarItemProps) => {
   const Component = href ? Link : 'button';
 
@@ -23,6 +25,7 @@ export const SidebarItem = ({
     <Component
       href={href || ''}
       onClick={onClick}
+      disabled={disabled}
     >
       <span
         className={cn(
