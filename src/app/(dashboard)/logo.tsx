@@ -19,7 +19,9 @@ export const Logo = () => {
             layout="fill"
           />
         </span>
-        <h1 className={cn(font.className, 'text-2xl font-bold')}>Image AI</h1>
+        <h1 className={cn(font.className, 'text-2xl font-bold')}>
+          Lorem Ipsum
+        </h1>
       </span>
     </Link>
   );
